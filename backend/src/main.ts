@@ -9,22 +9,13 @@ import * as express from 'express';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
+  // CORS (обновлённый вариант)
   app.enableCors({
-    origin: (origin: string | undefined, callback: (error: Error | null, allow?: boolean) => void) => {
-      const allowed = [
-        'http://localhost:5173',
-        process.env.FRONTEND_URL,
-      ].filter(Boolean);
-
-      if (!origin || allowed.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'));
-      }
-    },
+    origin: [
+      'http://localhost:5173',
+      process.env.FRONTEND_URL,
+    ].filter(Boolean),
     credentials: true,
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-    allowedHeaders: 'Content-Type, Accept, Authorization',
   });
 
   app.useGlobalPipes(

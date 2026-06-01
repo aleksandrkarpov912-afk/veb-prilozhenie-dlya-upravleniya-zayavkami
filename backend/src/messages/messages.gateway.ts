@@ -10,36 +10,29 @@ import { Server, Socket } from 'socket.io';
 
 @WebSocketGateway({
   cors: {
-    origin: '*',
+    origin: [
+      'http://localhost:5173',
+      process.env.FRONTEND_URL,
+    ],
+    credentials: true,
   },
 })
 export class MessagesGateway
-  implements
-    OnGatewayConnection,
-    OnGatewayDisconnect
+  implements OnGatewayConnection, OnGatewayDisconnect
 {
   @WebSocketServer()
   server: Server;
 
   handleConnection(client: Socket) {
-    console.log(
-      'Client connected:',
-      client.id,
-    );
+    console.log('Client connected:', client.id);
   }
 
   handleDisconnect(client: Socket) {
-    console.log(
-      'Client disconnected:',
-      client.id,
-    );
+    console.log('Client disconnected:', client.id);
   }
 
   @SubscribeMessage('joinTicket')
-  handleJoinTicket(
-    client: Socket,
-    ticketId: string,
-  ) {
+  handleJoinTicket(client: Socket, ticketId: string) {
     client.join(`ticket-${ticketId}`);
   }
 
