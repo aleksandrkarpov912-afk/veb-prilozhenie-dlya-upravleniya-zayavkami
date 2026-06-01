@@ -20,7 +20,7 @@ const FRONTEND = [
     credentials: true,
   },
   transports: ['websocket', 'polling'],
-  path: '/socket.io', // ✅ ЯВНО ЗАДАННЫЙ PATH
+  path: '/socket.io', 
 })
 export class MessagesGateway
   implements OnGatewayConnection, OnGatewayDisconnect

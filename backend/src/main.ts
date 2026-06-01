@@ -7,7 +7,11 @@ import { join } from 'path';
 import * as express from 'express';
 
 async function bootstrap() {
+  console.log('🔥 BOOTSTRAP START');
+
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+  console.log('🔥 APP CREATED');
 
   app.enableCors({
     origin: [
@@ -48,7 +52,10 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
 
   const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
-  await app.listen(port);
+
+  await app.listen(port, '0.0.0.0');
+
+  console.log('🔥 SERVER STARTED');
 }
 
 bootstrap();
