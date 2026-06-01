@@ -5,19 +5,23 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import * as express from 'express';
+import { IoAdapter } from '@nestjs/platform-socket.io';
 
 async function bootstrap() {
   console.log('BOOTSTRAP START');
 
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
+  app.useWebSocketAdapter(new IoAdapter(app));
+
   console.log('APP CREATED');
 
   app.enableCors({
     origin: [
       'http://localhost:5173',
+      'https://veb-prilozhenie-dlya-upravleniya-zayavkami-5ydt-b8e0uijdl.vercel.app',
       process.env.FRONTEND_URL,
-    ],
+    ].filter(Boolean),
     credentials: true,
   });
 
@@ -29,10 +33,7 @@ async function bootstrap() {
     }),
   );
 
-  app.use(
-    '/uploads',
-    express.static(join(__dirname, '..', 'uploads')),
-  );
+  app.use('/uploads', express.static(join(__dirname, '..', 'uploads')));
 
   const config = new DocumentBuilder()
     .setTitle('HelpDesk API')
