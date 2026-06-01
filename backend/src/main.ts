@@ -9,11 +9,13 @@ import * as express from 'express';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  // CORS (обновлённый вариант)
+  const FRONTEND_URL = process.env.FRONTEND_URL || '';
+
+  // CORS (жёсткий вариант)
   app.enableCors({
     origin: [
       'http://localhost:5173',
-      process.env.FRONTEND_URL,
+      FRONTEND_URL,
     ].filter(Boolean),
     credentials: true,
   });
