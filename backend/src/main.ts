@@ -7,11 +7,11 @@ import { join } from 'path';
 import * as express from 'express';
 
 async function bootstrap() {
-  console.log('🔥 BOOTSTRAP START');
+  console.log('BOOTSTRAP START');
 
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  console.log('🔥 APP CREATED');
+  console.log('APP CREATED');
 
   app.enableCors({
     origin: [
@@ -55,7 +55,7 @@ async function bootstrap() {
 
   await app.listen(port, '0.0.0.0');
 
-  console.log('🔥 SERVER STARTED');
+  console.log('SERVER STARTED');
 }
 
 bootstrap();
