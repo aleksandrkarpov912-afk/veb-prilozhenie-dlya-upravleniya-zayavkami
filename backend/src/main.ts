@@ -10,9 +10,16 @@ import { IoAdapter } from '@nestjs/platform-socket.io';
 async function bootstrap() {
   console.log('BOOTSTRAP START');
 
+  console.log('ENV CHECK', {
+    DATABASE_URL: process.env.DATABASE_URL ? 'OK' : 'MISSING',
+    FRONTEND_URL: process.env.FRONTEND_URL,
+  });
+
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   app.useWebSocketAdapter(new IoAdapter(app));
+
+  console.log('DATABASE URL CHECK:', !!process.env.DATABASE_URL);
 
   console.log('APP CREATED');
 
@@ -58,5 +65,13 @@ async function bootstrap() {
 
   console.log('SERVER STARTED');
 }
+
+process.on('uncaughtException', (err) => {
+  console.error('UNCUGHT EXCEPTION:', err);
+});
+
+process.on('unhandledRejection', (err) => {
+  console.error('UNHANDLED REJECTION:', err);
+});
 
 bootstrap();
