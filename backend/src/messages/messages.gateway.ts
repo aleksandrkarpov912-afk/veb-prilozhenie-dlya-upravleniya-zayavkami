@@ -11,7 +11,6 @@ import { Server, Socket } from 'socket.io';
 const FRONTEND = [
   'http://localhost:5173',
   process.env.FRONTEND_URL,
-  'https://veb-prilozhenie-dlya-upravleniya-za-pi.vercel.app',
 ].filter(Boolean);
 
 @WebSocketGateway({
@@ -19,7 +18,9 @@ const FRONTEND = [
     origin: FRONTEND,
     credentials: true,
   },
-  transports: ['websocket', 'polling'],
+
+  // ❌ ВАЖНО: НЕ задаём transports вручную
+  // Railway сам выбирает лучший транспорт
 })
 export class MessagesGateway
   implements OnGatewayConnection, OnGatewayDisconnect
@@ -28,11 +29,11 @@ export class MessagesGateway
   server: Server;
 
   handleConnection(client: Socket) {
-    console.log('Client connected:', client.id);
+    console.log('SOCKET CONNECTED:', client.id);
   }
 
   handleDisconnect(client: Socket) {
-    console.log('Client disconnected:', client.id);
+    console.log('SOCKET DISCONNECTED:', client.id);
   }
 
   @SubscribeMessage('joinTicket')

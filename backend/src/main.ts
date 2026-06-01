@@ -17,21 +17,30 @@ async function bootstrap() {
 
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
+  // ✅ WebSocket adapter (обязательно для Railway)
   app.useWebSocketAdapter(new IoAdapter(app));
-
-  console.log('DATABASE URL CHECK:', !!process.env.DATABASE_URL);
 
   console.log('APP CREATED');
 
+  // ✅ CORS (очищенный и безопасный)
   app.enableCors({
-    origin: [
-      'http://localhost:5173',
-      'https://veb-prilozhenie-dlya-upravleniya-zayavkami-5ydt-b8e0uijdl.vercel.app',
-      process.env.FRONTEND_URL,
-    ].filter(Boolean),
+    origin: (origin, callback) => {
+      const allowedOrigins = [
+        'http://localhost:5173',
+        process.env.FRONTEND_URL,
+      ].filter(Boolean);
+
+      // Railway + Vercel fix (разрешаем null origin для websocket)
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(null, false);
+      }
+    },
     credentials: true,
   });
 
+  // ✅ Validation
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -40,8 +49,10 @@ async function bootstrap() {
     }),
   );
 
+  // ✅ static uploads
   app.use('/uploads', express.static(join(__dirname, '..', 'uploads')));
 
+  // Swagger
   const config = new DocumentBuilder()
     .setTitle('HelpDesk API')
     .setDescription('API для системы заявок')
@@ -63,7 +74,7 @@ async function bootstrap() {
 
   await app.listen(port, '0.0.0.0');
 
-  console.log('SERVER STARTED');
+  console.log('SERVER STARTED ON PORT:', port);
 }
 
 process.on('uncaughtException', (err) => {
