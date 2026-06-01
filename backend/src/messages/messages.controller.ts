@@ -32,6 +32,7 @@ export class MessagesController {
             '-' +
             Math.round(Math.random() * 1e9) +
             extname(file.originalname);
+
           cb(null, uniqueName);
         },
       }),
@@ -44,6 +45,7 @@ export class MessagesController {
 
     const baseUrl =
       process.env.BACKEND_URL ||
+      process.env.RAILWAY_PUBLIC_DOMAIN ||
       'https://veb-prilozhenie-dlya-upravleniya-zayavkami-production.up.railway.app';
 
     return {

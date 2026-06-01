@@ -12,7 +12,7 @@ async function bootstrap() {
   app.enableCors({
     origin: [
       'http://localhost:5173',
-      'https://veb-prilozhenie-dlya-upravleniya-za-pi.vercel.app',
+      process.env.FRONTEND_URL,
     ],
     credentials: true,
   });
