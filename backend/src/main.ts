@@ -9,13 +9,18 @@ import * as express from 'express';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
+  // ✅ CORS (ПРОД + ЛОКАЛКА)
   app.enableCors({
-    origin: 'http://localhost:5173',
+    origin: [
+      'http://localhost:5173', // dev frontend
+      process.env.FRONTEND_URL, // Vercel frontend
+    ].filter(Boolean),
     credentials: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     allowedHeaders: 'Content-Type, Accept, Authorization',
   });
 
+  // ✅ Validation
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -24,12 +29,13 @@ async function bootstrap() {
     }),
   );
 
-  // Строка, которую нужно было добавить
+  // ✅ Static uploads
   app.use(
     '/uploads',
     express.static(join(__dirname, '..', 'uploads')),
   );
 
+  // Swagger
   const config = new DocumentBuilder()
     .setTitle('HelpDesk API')
     .setDescription('API для системы заявок')
@@ -47,7 +53,9 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  await app.listen(3000);
+  // Railway port fix (ВАЖНО)
+  const port = process.env.PORT || 3000;
+  await app.listen(port);
 }
 
 bootstrap();
