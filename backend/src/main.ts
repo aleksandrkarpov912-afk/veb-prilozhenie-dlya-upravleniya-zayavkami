@@ -11,10 +11,12 @@ async function bootstrap() {
 
   const FRONTEND_URL = process.env.FRONTEND_URL || '';
 
-  // CORS (жёсткий вариант)
+  // CORS (расширенный вариант для Vercel)
   app.enableCors({
     origin: [
       'http://localhost:5173',
+      'https://veb-prilozhenie-dlya-upravleniya-za-pi.vercel.app',
+      'https://veb-prilozhenie-dlya-upravleniya-zayavkami-*.vercel.app',
       FRONTEND_URL,
     ].filter(Boolean),
     credentials: true,

@@ -8,14 +8,9 @@ import {
 
 import { Server, Socket } from 'socket.io';
 
-const FRONTEND_URL = process.env.FRONTEND_URL || '';
-
 @WebSocketGateway({
   cors: {
-    origin: [
-      'http://localhost:5173',
-      FRONTEND_URL,
-    ],
+    origin: '*', // ВРЕМЕННО для проверки подключения
     credentials: true,
   },
 })
