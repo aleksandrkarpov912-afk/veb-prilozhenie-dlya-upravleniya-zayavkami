@@ -9,18 +9,24 @@ import * as express from 'express';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  // ✅ CORS (ПРОД + ЛОКАЛКА)
   app.enableCors({
-    origin: [
-      'http://localhost:5173', // dev frontend
-      process.env.FRONTEND_URL, // Vercel frontend
-    ].filter(Boolean),
+    origin: (origin: string | undefined, callback: (error: Error | null, allow?: boolean) => void) => {
+      const allowed = [
+        'http://localhost:5173',
+        process.env.FRONTEND_URL,
+      ].filter(Boolean);
+
+      if (!origin || allowed.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     credentials: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     allowedHeaders: 'Content-Type, Accept, Authorization',
   });
 
-  // ✅ Validation
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -29,13 +35,11 @@ async function bootstrap() {
     }),
   );
 
-  // ✅ Static uploads
   app.use(
     '/uploads',
     express.static(join(__dirname, '..', 'uploads')),
   );
 
-  // Swagger
   const config = new DocumentBuilder()
     .setTitle('HelpDesk API')
     .setDescription('API для системы заявок')
@@ -53,8 +57,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  // Railway port fix (ВАЖНО)
-  const port = process.env.PORT || 3000;
+  const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
   await app.listen(port);
 }
 
