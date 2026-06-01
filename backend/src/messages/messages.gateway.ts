@@ -7,6 +7,7 @@ import {
 } from '@nestjs/websockets';
 
 import { Server, Socket } from 'socket.io';
+import { OnEvent } from '@nestjs/event-emitter';
 
 @WebSocketGateway({
   cors: {
@@ -19,7 +20,9 @@ import { Server, Socket } from 'socket.io';
   path: '/socket.io',
   transports: ['websocket', 'polling'],
 })
-export class MessagesGateway implements OnGatewayConnection, OnGatewayDisconnect {
+export class MessagesGateway
+  implements OnGatewayConnection, OnGatewayDisconnect
+{
   @WebSocketServer()
   server: Server;
 
@@ -36,7 +39,10 @@ export class MessagesGateway implements OnGatewayConnection, OnGatewayDisconnect
     client.join(`ticket-${ticketId}`);
   }
 
-  sendMessage(ticketId: number, message: any) {
-    this.server.to(`ticket-${ticketId}`).emit('newMessage', message);
+  @OnEvent('message.created')
+  handleMessage(message: any) {
+    this.server
+      .to(`ticket-${message.ticketId}`)
+      .emit('newMessage', message);
   }
 }

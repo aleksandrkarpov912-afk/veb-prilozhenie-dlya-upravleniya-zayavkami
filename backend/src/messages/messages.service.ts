@@ -1,12 +1,12 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { MessagesGateway } from './messages.gateway';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class MessagesService {
   constructor(
     private prisma: PrismaService,
-    private gateway: MessagesGateway,
+    private eventEmitter: EventEmitter2,
   ) {}
 
   async create(
@@ -27,22 +27,16 @@ export class MessagesService {
       },
     });
 
-    this.gateway.sendMessage(ticketId, message);
+    this.eventEmitter.emit('message.created', message);
 
     return message;
   }
 
   async findByTicket(ticketId: number) {
     return this.prisma.message.findMany({
-      where: {
-        ticketId,
-      },
-      include: {
-        user: true,
-      },
-      orderBy: {
-        createdAt: 'asc',
-      },
+      where: { ticketId },
+      include: { user: true },
+      orderBy: { createdAt: 'asc' },
     });
   }
 }

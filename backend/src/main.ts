@@ -7,16 +7,9 @@ import { join } from 'path';
 import * as express from 'express';
 
 async function bootstrap() {
-  console.log('BOOTSTRAP START');
-
-  console.log('ENV CHECK', {
-    DATABASE_URL: process.env.DATABASE_URL ? 'OK' : 'MISSING',
-    FRONTEND_URL: process.env.FRONTEND_URL,
-  });
-
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  console.log('APP CREATED');
+  app.getHttpAdapter().getInstance().set('trust proxy', 1);
 
   app.enableCors({
     origin: (origin, callback) => {
@@ -64,8 +57,6 @@ async function bootstrap() {
   const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 
   await app.listen(port, '0.0.0.0');
-
-  console.log('SERVER STARTED ON PORT:', port);
 }
 
 process.on('uncaughtException', (err) => {
