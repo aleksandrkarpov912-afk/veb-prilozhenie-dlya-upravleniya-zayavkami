@@ -8,10 +8,16 @@ import {
 
 import { Server, Socket } from 'socket.io';
 
+const FRONTEND = [
+  'http://localhost:5173',
+  process.env.FRONTEND_URL,
+  'https://veb-prilozhenie-dlya-upravleniya-za-pi.vercel.app'
+].filter(Boolean);
+
 @WebSocketGateway({
   cors: {
-    origin: '*',
-    methods: ['GET', 'POST'],
+    origin: FRONTEND,
+    credentials: true,
   },
   transports: ['websocket', 'polling'],
 })

@@ -11,9 +11,12 @@ async function bootstrap() {
 
   const FRONTEND_URL = process.env.FRONTEND_URL || '';
 
-  // CORS (ВРЕМЕННЫЙ РЕЖИМ ДЛЯ DEBUG SOCKET.IO)
   app.enableCors({
-    origin: '*',
+    origin: [
+      'http://localhost:5173',
+      process.env.FRONTEND_URL,
+      'https://veb-prilozhenie-dlya-upravleniya-za-pi.vercel.app'
+    ].filter(Boolean),
     credentials: true,
   });
 
