@@ -20,7 +20,6 @@ import { MessagesService } from './messages.service';
 export class MessagesController {
   constructor(private service: MessagesService) {}
 
-  // 🔔 ВАЖНО: upload идёт ПЕРЕД :ticketId
   @UseGuards(AuthGuard('jwt'))
   @Post('upload')
   @UseInterceptors(
@@ -43,14 +42,12 @@ export class MessagesController {
       throw new BadRequestException('File missing');
     }
 
-    console.log('File uploaded:', {
-      originalName: file.originalname,
-      filename: file.filename,
-      size: file.size,
-    });
+    const baseUrl =
+      process.env.BACKEND_URL ||
+      'https://veb-prilozhenie-dlya-upravleniya-zayavkami-production.up.railway.app';
 
     return {
-      url: `http://localhost:3000/uploads/${file.filename}`,
+      url: `${baseUrl}/uploads/${file.filename}`,
     };
   }
 
@@ -67,21 +64,14 @@ export class MessagesController {
       throw new BadRequestException('Invalid ticketId');
     }
 
-    const text = typeof body?.text === 'string'
-      ? body.text.trim()
-      : '';
+    const text = typeof body?.text === 'string' ? body.text.trim() : '';
     const fileUrl = body?.fileUrl ?? null;
 
     if (!text && !fileUrl) {
       throw new BadRequestException('Message cannot be empty');
     }
 
-    return this.service.create(
-      tid,
-      req.user.id,
-      text,
-      fileUrl,
-    );
+    return this.service.create(tid, req.user.id, text, fileUrl);
   }
 
   @UseGuards(AuthGuard('jwt'))
