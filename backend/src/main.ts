@@ -5,7 +5,6 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import * as express from 'express';
-import { IoAdapter } from '@nestjs/platform-socket.io';
 
 async function bootstrap() {
   console.log('BOOTSTRAP START');
@@ -17,12 +16,8 @@ async function bootstrap() {
 
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  // ✅ WebSocket adapter (обязательно для Railway)
-  app.useWebSocketAdapter(new IoAdapter(app));
-
   console.log('APP CREATED');
 
-  // ✅ CORS (очищенный и безопасный)
   app.enableCors({
     origin: (origin, callback) => {
       const allowedOrigins = [
@@ -30,17 +25,15 @@ async function bootstrap() {
         process.env.FRONTEND_URL,
       ].filter(Boolean);
 
-      // Railway + Vercel fix (разрешаем null origin для websocket)
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
-        callback(null, false);
+        callback(null, true);
       }
     },
     credentials: true,
   });
 
-  // ✅ Validation
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -49,10 +42,8 @@ async function bootstrap() {
     }),
   );
 
-  // ✅ static uploads
   app.use('/uploads', express.static(join(__dirname, '..', 'uploads')));
 
-  // Swagger
   const config = new DocumentBuilder()
     .setTitle('HelpDesk API')
     .setDescription('API для системы заявок')

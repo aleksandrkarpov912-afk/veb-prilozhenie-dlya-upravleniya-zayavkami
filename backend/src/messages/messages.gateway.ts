@@ -8,32 +8,27 @@ import {
 
 import { Server, Socket } from 'socket.io';
 
-const FRONTEND = [
-  'http://localhost:5173',
-  process.env.FRONTEND_URL,
-].filter(Boolean);
-
 @WebSocketGateway({
   cors: {
-    origin: FRONTEND,
+    origin: [
+      'http://localhost:5173',
+      process.env.FRONTEND_URL,
+    ].filter(Boolean),
     credentials: true,
   },
-
-  // ❌ ВАЖНО: НЕ задаём transports вручную
-  // Railway сам выбирает лучший транспорт
+  path: '/socket.io',
+  transports: ['websocket', 'polling'],
 })
-export class MessagesGateway
-  implements OnGatewayConnection, OnGatewayDisconnect
-{
+export class MessagesGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
   server: Server;
 
   handleConnection(client: Socket) {
-    console.log('SOCKET CONNECTED:', client.id);
+    console.log('WS CONNECT:', client.id);
   }
 
   handleDisconnect(client: Socket) {
-    console.log('SOCKET DISCONNECTED:', client.id);
+    console.log('WS DISCONNECT:', client.id);
   }
 
   @SubscribeMessage('joinTicket')
