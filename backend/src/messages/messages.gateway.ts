@@ -5,7 +5,6 @@ import {
   OnGatewayConnection,
   OnGatewayDisconnect,
 } from '@nestjs/websockets';
-
 import { Server, Socket } from 'socket.io';
 import { OnEvent } from '@nestjs/event-emitter';
 
@@ -17,8 +16,7 @@ import { OnEvent } from '@nestjs/event-emitter';
     ].filter(Boolean),
     credentials: true,
   },
-  path: '/socket.io',
-  transports: ['websocket', 'polling'],
+  transports: ['websocket'],
 })
 export class MessagesGateway
   implements OnGatewayConnection, OnGatewayDisconnect
