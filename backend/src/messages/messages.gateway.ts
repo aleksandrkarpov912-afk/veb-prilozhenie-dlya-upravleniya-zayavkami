@@ -5,6 +5,7 @@ import {
   OnGatewayConnection,
   OnGatewayDisconnect,
 } from '@nestjs/websockets';
+
 import { Server, Socket } from 'socket.io';
 import { OnEvent } from '@nestjs/event-emitter';
 
@@ -32,13 +33,27 @@ export class MessagesGateway
     console.log('WS DISCONNECT:', client.id);
   }
 
+  // ✅ FIX: payload объект вместо string
   @SubscribeMessage('joinTicket')
-  handleJoinTicket(client: Socket, ticketId: string) {
-    client.join(`ticket-${ticketId}`);
+  handleJoinTicket(
+    client: Socket,
+    payload: { ticketId: string },
+  ) {
+    if (!payload?.ticketId) return;
+
+    client.join(`ticket-${payload.ticketId}`);
   }
 
+  // ✅ FIX: типизация event
   @OnEvent('message.created')
-  handleMessage(message: any) {
+  handleMessage(message: {
+    id: string;
+    ticketId: string;
+    text: string;
+    createdAt?: Date;
+  }) {
+    if (!message?.ticketId) return;
+
     this.server
       .to(`ticket-${message.ticketId}`)
       .emit('newMessage', message);

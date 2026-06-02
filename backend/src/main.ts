@@ -14,19 +14,12 @@ async function bootstrap() {
 
   app.useWebSocketAdapter(new IoAdapter(app));
 
+  // ✅ FIX: нормальный CORS (без "always true")
   app.enableCors({
-    origin: (origin, callback) => {
-      const allowedOrigins = [
-        'http://localhost:5173',
-        process.env.FRONTEND_URL,
-      ].filter(Boolean);
-
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(null, true);
-      }
-    },
+    origin: [
+      'http://localhost:5173',
+      process.env.FRONTEND_URL,
+    ].filter(Boolean),
     credentials: true,
   });
 
@@ -38,7 +31,10 @@ async function bootstrap() {
     }),
   );
 
-  app.use('/uploads', express.static(join(__dirname, '..', 'uploads')));
+  app.use(
+    '/uploads',
+    express.static(join(__dirname, '..', 'uploads')),
+  );
 
   const config = new DocumentBuilder()
     .setTitle('HelpDesk API')
@@ -58,10 +54,12 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
 
   await app.listen(process.env.PORT || 3000, '0.0.0.0');
+
+  console.log('🚀 Server started on port:', process.env.PORT || 3000);
 }
 
 process.on('uncaughtException', (err) => {
-  console.error('UNCUGHT EXCEPTION:', err);
+  console.error('UNCAUGHT EXCEPTION:', err);
 });
 
 process.on('unhandledRejection', (err) => {
