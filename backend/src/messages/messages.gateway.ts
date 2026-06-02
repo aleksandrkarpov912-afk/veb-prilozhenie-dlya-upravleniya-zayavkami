@@ -9,12 +9,11 @@ import {
 import { Server, Socket } from 'socket.io';
 import { OnEvent } from '@nestjs/event-emitter';
 
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
+
 @WebSocketGateway({
   cors: {
-    origin: [
-      'http://localhost:5173',
-      process.env.FRONTEND_URL,
-    ].filter(Boolean),
+    origin: [FRONTEND_URL],
     credentials: true,
   },
   transports: ['websocket'],
@@ -33,27 +32,13 @@ export class MessagesGateway
     console.log('WS DISCONNECT:', client.id);
   }
 
-  // ✅ FIX: payload объект вместо string
   @SubscribeMessage('joinTicket')
-  handleJoinTicket(
-    client: Socket,
-    payload: { ticketId: string },
-  ) {
-    if (!payload?.ticketId) return;
-
-    client.join(`ticket-${payload.ticketId}`);
+  handleJoinTicket(client: Socket, ticketId: string) {
+    client.join(`ticket-${ticketId}`);
   }
 
-  // ✅ FIX: типизация event
   @OnEvent('message.created')
-  handleMessage(message: {
-    id: string;
-    ticketId: string;
-    text: string;
-    createdAt?: Date;
-  }) {
-    if (!message?.ticketId) return;
-
+  handleMessage(message: any) {
     this.server
       .to(`ticket-${message.ticketId}`)
       .emit('newMessage', message);
