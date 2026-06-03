@@ -18,7 +18,6 @@ export const router = createBrowserRouter([
       </ProtectedRoute>
     ),
   },
-
   {
     path: '/tickets/create',
     element: (
@@ -27,7 +26,6 @@ export const router = createBrowserRouter([
       </ProtectedRoute>
     ),
   },
-
   {
     path: '/tickets/:id',
     element: (
@@ -36,8 +34,6 @@ export const router = createBrowserRouter([
       </ProtectedRoute>
     ),
   },
-
-  // ВОТ ЭТО ДОБАВИТЬ
   {
     path: '/tickets/:id/edit',
     element: (
@@ -46,12 +42,10 @@ export const router = createBrowserRouter([
       </ProtectedRoute>
     ),
   },
-
   {
     path: '/login',
     element: <LoginPage />,
   },
-
   {
     path: '/register',
     element: <RegisterPage />,
