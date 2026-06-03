@@ -29,7 +29,6 @@ async function bootstrap() {
     }),
   );
 
-  // ===== uploads safety =====
   const uploadsPath = join(__dirname, '..', 'uploads');
 
   if (!fs.existsSync(uploadsPath)) {
@@ -38,8 +37,11 @@ async function bootstrap() {
 
   app.use('/uploads', express.static(uploadsPath));
 
-  // ===== port fix =====
-  const port = process.env.PORT ? Number(process.env.PORT) : 8080;
+  const port = Number(process.env.PORT);
+
+  if (!port) {
+    throw new Error('PORT is not defined');
+  }
 
   await app.listen(port, '0.0.0.0');
 
