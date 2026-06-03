@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 import api from '../api/axios';
 
@@ -8,17 +8,12 @@ export default function RegisterPage() {
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [password, setPassword] =
-    useState('');
+  const [password, setPassword] = useState('');
 
-  const [loading, setLoading] =
-    useState(false);
-
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const handleRegister = async (
-    e: React.FormEvent<HTMLFormElement>,
-  ) => {
+  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
@@ -33,10 +28,7 @@ export default function RegisterPage() {
 
       navigate('/login');
     } catch (err: any) {
-      setError(
-        err.response?.data?.message ||
-          'Register failed',
-      );
+      setError(err.response?.data?.message || 'Register failed');
     } finally {
       setLoading(false);
     }
@@ -66,40 +58,32 @@ export default function RegisterPage() {
           type="text"
           placeholder="Name"
           value={name}
-          onChange={(e) =>
-            setName(e.target.value)
-          }
+          onChange={(e) => setName(e.target.value)}
         />
 
         <input
           type="email"
           placeholder="Email"
           value={email}
-          onChange={(e) =>
-            setEmail(e.target.value)
-          }
+          onChange={(e) => setEmail(e.target.value)}
         />
 
         <input
           type="password"
           placeholder="Password"
           value={password}
-          onChange={(e) =>
-            setPassword(e.target.value)
-          }
+          onChange={(e) => setPassword(e.target.value)}
         />
 
-        {error && (
-          <p style={{ color: 'red' }}>
-            {error}
-          </p>
-        )}
+        {error && <p style={{ color: 'red' }}>{error}</p>}
 
         <button disabled={loading}>
-          {loading
-            ? 'Loading...'
-            : 'Register'}
+          {loading ? 'Loading...' : 'Register'}
         </button>
+
+        <p style={{ marginTop: 16 }}>
+          Уже есть аккаунт? <Link to="/login">Войти</Link>
+        </p>
       </form>
     </div>
   );
