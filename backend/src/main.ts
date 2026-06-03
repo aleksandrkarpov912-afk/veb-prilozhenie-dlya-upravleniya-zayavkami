@@ -1,7 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { IoAdapter } from '@nestjs/platform-socket.io';
 import { join } from 'path';
@@ -17,18 +16,7 @@ async function bootstrap() {
   app.useWebSocketAdapter(new IoAdapter(app));
 
   app.enableCors({
-    origin: (origin, callback) => {
-      const allowedOrigins = [
-        'http://localhost:5173',
-        FRONTEND_URL,
-      ];
-
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(null, true); // оставил permissive как у тебя
-      }
-    },
+    origin: [FRONTEND_URL, 'http://localhost:5173'],
     credentials: true,
   });
 
@@ -42,24 +30,11 @@ async function bootstrap() {
 
   app.use('/uploads', express.static(join(__dirname, '..', 'uploads')));
 
-  const config = new DocumentBuilder()
-    .setTitle('HelpDesk API')
-    .setDescription('API для системы заявок')
-    .setVersion('1.0')
-    .addBearerAuth(
-      {
-        type: 'http',
-        scheme: 'bearer',
-        bearerFormat: 'JWT',
-      },
-      'access-token',
-    )
-    .build();
+  const port = Number(process.env.PORT || 8080);
 
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  await app.listen(port, '0.0.0.0');
 
-  await app.listen(process.env.PORT || 3000, '0.0.0.0');
+  console.log(`SERVER STARTED ON PORT: ${port}`);
 }
 
 process.on('uncaughtException', (err) => {
