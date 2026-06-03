@@ -5,6 +5,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { IoAdapter } from '@nestjs/platform-socket.io';
 import { join } from 'path';
 import * as express from 'express';
+import * as fs from 'fs';
 
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
 
@@ -28,9 +29,17 @@ async function bootstrap() {
     }),
   );
 
-  app.use('/uploads', express.static(join(__dirname, '..', 'uploads')));
+  // ===== uploads safety =====
+  const uploadsPath = join(__dirname, '..', 'uploads');
 
-  const port = Number(process.env.PORT || 8080);
+  if (!fs.existsSync(uploadsPath)) {
+    fs.mkdirSync(uploadsPath, { recursive: true });
+  }
+
+  app.use('/uploads', express.static(uploadsPath));
+
+  // ===== port fix =====
+  const port = process.env.PORT ? Number(process.env.PORT) : 8080;
 
   await app.listen(port, '0.0.0.0');
 
