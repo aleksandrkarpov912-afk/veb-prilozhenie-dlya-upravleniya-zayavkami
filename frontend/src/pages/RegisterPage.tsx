@@ -1,9 +1,12 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-
+import { useNavigate } from 'react-router-dom';
 import api from '../api/axios';
 
-export default function RegisterPage() {
+type Props = {
+  switchToLogin: () => void;
+};
+
+export default function RegisterPage({ switchToLogin }: Props) {
   const navigate = useNavigate();
 
   const [name, setName] = useState('');
@@ -35,23 +38,8 @@ export default function RegisterPage() {
   };
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
-      }}
-    >
-      <form
-        onSubmit={handleRegister}
-        style={{
-          width: 320,
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 12,
-        }}
-      >
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+      <form onSubmit={handleRegister} style={{ width: 320, display: 'flex', flexDirection: 'column', gap: 12 }}>
         <h1>Register</h1>
 
         <input
@@ -81,9 +69,9 @@ export default function RegisterPage() {
           {loading ? 'Loading...' : 'Register'}
         </button>
 
-        <p style={{ marginTop: 16 }}>
-          Уже есть аккаунт? <Link to="/login">Войти</Link>
-        </p>
+        <button type="button" onClick={switchToLogin}>
+          Уже есть аккаунт? Войти
+        </button>
       </form>
     </div>
   );
