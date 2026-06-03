@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 
-import AuthPage from '../pages/AuthPage';
+import LoginPage from '../pages/LoginPage';
+import RegisterPage from '../pages/RegisterPage';
 import DashboardPage from '../pages/DashboardPage';
 import CreateTicketPage from '../pages/CreateTicketPage';
 import TicketDetailsPage from '../pages/TicketDetailsPage';
@@ -9,11 +10,6 @@ import EditTicketPage from '../pages/EditTicketPage';
 import ProtectedRoute from '../components/ProtectedRoute';
 
 export const router = createBrowserRouter([
-  {
-    path: '/auth',
-    element: <AuthPage />,
-  },
-
   {
     path: '/',
     element: (
@@ -41,6 +37,7 @@ export const router = createBrowserRouter([
     ),
   },
 
+  // ВОТ ЭТО ДОБАВИТЬ
   {
     path: '/tickets/:id/edit',
     element: (
@@ -48,5 +45,15 @@ export const router = createBrowserRouter([
         <EditTicketPage />
       </ProtectedRoute>
     ),
+  },
+
+  {
+    path: '/login',
+    element: <LoginPage />,
+  },
+
+  {
+    path: '/register',
+    element: <RegisterPage />,
   },
 ]);

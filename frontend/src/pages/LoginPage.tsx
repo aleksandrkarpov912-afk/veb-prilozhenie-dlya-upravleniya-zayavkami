@@ -1,12 +1,9 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+
 import api from '../api/axios';
 
-type Props = {
-  switchToRegister: () => void;
-};
-
-export default function LoginPage({ switchToRegister }: Props) {
+export default function LoginPage() {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
@@ -15,7 +12,9 @@ export default function LoginPage({ switchToRegister }: Props) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (
+    e: React.FormEvent<HTMLFormElement>,
+  ) => {
     e.preventDefault();
 
     try {
@@ -27,44 +26,80 @@ export default function LoginPage({ switchToRegister }: Props) {
         password,
       });
 
-      localStorage.setItem('token', response.data.access_token);
+      localStorage.setItem(
+        'token',
+        response.data.access_token,
+      );
 
       navigate('/');
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Login failed');
+      setError(
+        err.response?.data?.message ||
+          'Login failed',
+      );
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-      <form onSubmit={handleLogin} style={{ width: 320, display: 'flex', flexDirection: 'column', gap: 12 }}>
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+      }}
+    >
+      <form
+        onSubmit={handleLogin}
+        style={{
+          width: 320,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 12,
+        }}
+      >
         <h1>Login</h1>
 
         <input
           type="email"
           placeholder="Email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) =>
+            setEmail(e.target.value)
+          }
         />
 
         <input
           type="password"
           placeholder="Password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e) =>
+            setPassword(e.target.value)
+          }
         />
 
-        {error && <p style={{ color: 'red' }}>{error}</p>}
+        {error && (
+          <p style={{ color: 'red' }}>
+            {error}
+          </p>
+        )}
 
         <button disabled={loading}>
           {loading ? 'Loading...' : 'Login'}
         </button>
 
-        <button type="button" onClick={switchToRegister}>
-          Нет аккаунта? Зарегистрироваться
-        </button>
+        <p
+          style={{
+            marginTop: 16,
+          }}
+        >
+          Нет аккаунта?{' '}
+          <Link to="/register">
+            Зарегистрироваться
+          </Link>
+        </p>
       </form>
     </div>
   );
