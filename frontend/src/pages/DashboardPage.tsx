@@ -12,7 +12,7 @@ export default function DashboardPage() {
 
   const logout = () => {
     localStorage.removeItem('token');
-    navigate('/login');
+    navigate('/auth');
   };
 
   const fetchTickets = async () => {

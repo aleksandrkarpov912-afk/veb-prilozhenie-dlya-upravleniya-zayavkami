@@ -10,7 +10,7 @@ export default function ProtectedRoute({
   const token = localStorage.getItem('token');
 
   if (!token) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/auth" replace />;
   }
 
   return children;
