@@ -37,6 +37,7 @@ export const router = createBrowserRouter([
     ),
   },
 
+  // ВОТ ЭТО ДОБАВИТЬ
   {
     path: '/tickets/:id/edit',
     element: (
@@ -47,12 +48,12 @@ export const router = createBrowserRouter([
   },
 
   {
-    path: '/auth/login',
+    path: '/login',
     element: <LoginPage />,
   },
 
   {
-    path: '/auth/register',
+    path: '/register',
     element: <RegisterPage />,
   },
 ]);
