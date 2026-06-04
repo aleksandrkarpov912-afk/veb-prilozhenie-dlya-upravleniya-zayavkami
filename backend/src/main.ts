@@ -17,7 +17,7 @@ async function bootstrap() {
   app.useWebSocketAdapter(new IoAdapter(app));
 
   app.enableCors({
-    origin: [FRONTEND_URL, 'http://localhost:5173'],
+    origin: true,
     credentials: true,
   });
 
