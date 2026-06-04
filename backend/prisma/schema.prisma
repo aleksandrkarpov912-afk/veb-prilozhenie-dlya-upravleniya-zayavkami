@@ -10,6 +10,7 @@ datasource db {
 enum TicketStatus {
   OPEN
   IN_PROGRESS
+  REJECTED
   CLOSED
 }
 
@@ -30,6 +31,7 @@ model Ticket {
   title       String
   description String
   status      TicketStatus @default(OPEN)
+
   userId      Int
   createdAt   DateTime     @default(now())
 
@@ -42,8 +44,10 @@ model Message {
   text      String
   fileUrl   String?
   createdAt DateTime @default(now())
+
   userId    Int
   user      User     @relation(fields: [userId], references: [id])
+
   ticketId  Int
   ticket    Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
 }

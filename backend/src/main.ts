@@ -7,19 +7,25 @@ import { join } from 'path';
 import * as express from 'express';
 import * as fs from 'fs';
 
-const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
+const FRONTEND_URL =
+  process.env.FRONTEND_URL || 'http://localhost:5173';
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const app =
+    await NestFactory.create<NestExpressApplication>(AppModule);
 
   app.getHttpAdapter().getInstance().set('trust proxy', 1);
 
-  app.useWebSocketAdapter(new IoAdapter(app));
-
+  // 🔥 FIX CORS (РАБОТАЕТ НА RAILWAY + VERCEL)
   app.enableCors({
-    origin: true,
+    origin: [
+      FRONTEND_URL,
+      'http://localhost:5173',
+    ],
     credentials: true,
   });
+
+  app.useWebSocketAdapter(new IoAdapter(app));
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -29,6 +35,7 @@ async function bootstrap() {
     }),
   );
 
+
   const uploadsPath = join(__dirname, '..', 'uploads');
 
   if (!fs.existsSync(uploadsPath)) {
@@ -37,7 +44,7 @@ async function bootstrap() {
 
   app.use('/uploads', express.static(uploadsPath));
 
-  const port = process.env.PORT ? Number(process.env.PORT) : 8080;
+  const port = Number(process.env.PORT || 8080);
 
   await app.listen(port, '0.0.0.0');
 
