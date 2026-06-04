@@ -10,27 +10,51 @@ export default function Profile() {
   const [form, setForm] = useState({
     name: '',
     email: '',
-    password: '',
+    password: '', // всегда пустой при загрузке
   });
 
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    getMe().then((res) => {
-      setForm((prev) => ({
-        ...prev,
-        name: res.data.name,
-        email: res.data.email,
-      }));
-    });
+    const load = async () => {
+      try {
+        const res = await getMe();
+
+        setForm({
+          name: res.data.name || '',
+          email: res.data.email || '',
+          password: '', // 🚀 всегда очищаем
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    load();
   }, []);
 
   const handleUpdate = async () => {
     setLoading(true);
+
     try {
-      await updateProfile(form);
+      // 🚀 отправляем только заполненные поля
+      const payload: any = {
+        name: form.name,
+        email: form.email,
+      };
+
+      if (form.password.trim()) {
+        payload.password = form.password;
+      }
+
+      await updateProfile(payload);
+
+      // очищаем пароль после обновления
+      setForm((prev) => ({ ...prev, password: '' }));
+
       alert(t('profile.updated'));
-    } catch {
+    } catch (e) {
+      console.error(e);
       alert(t('profile.error'));
     } finally {
       setLoading(false);
@@ -39,7 +63,6 @@ export default function Profile() {
 
   return (
     <div style={{ maxWidth: 400, position: 'relative' }}>
-      {/* LANGUAGE SWITCHER */}
       <div style={{ position: 'absolute', top: 10, right: 10 }}>
         <LanguageSwitcher />
       </div>
