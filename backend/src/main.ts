@@ -8,13 +8,26 @@ import * as express from 'express';
 import * as fs from 'fs';
 
 async function bootstrap() {
-  const app =
-    await NestFactory.create<NestExpressApplication>(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   app.getHttpAdapter().getInstance().set('trust proxy', 1);
 
   app.enableCors({
-    origin: true,
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+
+      const allowed = [/\.vercel\.app$/];
+
+      const isAllowed = allowed.some((rule) =>
+        rule instanceof RegExp ? rule.test(origin) : rule === origin,
+      );
+
+      if (isAllowed) {
+        return callback(null, true);
+      }
+
+      return callback(new Error(`CORS blocked: ${origin}`), false);
+    },
     credentials: true,
   });
 
