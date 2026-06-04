@@ -2,7 +2,12 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { getTicket, deleteTicket, updateTicketStatus } from '../api/tickets';
+import {
+  getTicket,
+  deleteTicket,
+  updateTicketStatus,
+} from '../api/tickets';
+
 import { getMessages } from '../api/messages';
 import { socket } from '../socket';
 
@@ -21,17 +26,15 @@ export default function TicketDetailsPage() {
   const [messages, setMessages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Исправлено: явное определение функции с возвратом значения
-  const getRole = () => {
+  const role = (() => {
     const token = localStorage.getItem('token');
     if (!token) return '';
     try {
-      return JSON.parse(atob(token.split('.')))?.role || '';
+      return JSON.parse(atob(token.split('.')[1]))?.role || '';
     } catch {
       return '';
     }
-  };
-  const role = getRole();
+  })();
 
   useEffect(() => {
     fetchTicket();
@@ -88,20 +91,20 @@ export default function TicketDetailsPage() {
 
   return (
     <div style={{ padding: 40, maxWidth: 700, margin: '0 auto' }}>
+
+      {/* BACK BUTTON LEFT EDGE */}
       <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
         <button onClick={() => navigate(-1)}>
           {t('ticket.back')}
         </button>
       </div>
 
+      {/* TITLE */}
       <h1 style={{ textAlign: 'center', marginTop: 10 }}>
         {ticket.title}
       </h1>
 
-      <p style={{ textAlign: 'center' }}>
-        {ticket.description}
-      </p>
-
+      {/* CONTROL BAR */}
       <div
         style={{
           display: 'flex',
@@ -110,10 +113,13 @@ export default function TicketDetailsPage() {
           margin: '15px 0',
         }}
       >
+
+        {/* LEFT: EDIT + DELETE */}
         <div style={{ display: 'flex', gap: 10 }}>
-          <Link to={`/tickets/edit/\${ticket.id}`}>
+          <Link to={`/tickets/edit/${ticket.id}`}>
             <button>{t('edit')}</button>
           </Link>
+
           {role === 'ADMIN' && (
             <button onClick={handleDelete}>
               {t('delete')}
@@ -121,6 +127,7 @@ export default function TicketDetailsPage() {
           )}
         </div>
 
+        {/* CENTER: STATUS */}
         <div>
           {role === 'ADMIN' ? (
             <select
@@ -128,7 +135,7 @@ export default function TicketDetailsPage() {
               onChange={async (e) => {
                 const updated = await updateTicketStatus(
                   String(ticket.id),
-                  e.target.value
+                  e.target.value,
                 );
                 setTicket(updated);
               }}
@@ -153,16 +160,19 @@ export default function TicketDetailsPage() {
           )}
         </div>
 
+        {/* RIGHT SPACER */}
         <div style={{ width: 120 }} />
       </div>
 
+      {/* DESCRIPTION */}
+      <p style={{ textAlign: 'center' }}>
+        {ticket.description}
+      </p>
+
+      {/* MESSAGES */}
       <div style={{ marginTop: 40 }}>
         <h3>{t('ticket.messages')}</h3>
-        {messages.length === 0 ? (
-          <p>No messages yet</p>
-        ) : (
-          <MessageList messages={messages} />
-        )}
+        <MessageList messages={messages} />
         <MessageForm ticketId={Number(id)} onMessageSent={loadMessages} />
       </div>
     </div>
