@@ -142,6 +142,7 @@ export default function TicketDetailsPage() {
             <option value="OPEN">OPEN</option>
             <option value="IN_PROGRESS">IN PROGRESS</option>
             <option value="CLOSED">CLOSED</option>
+            <option value="OPEN">REJECTED</option>
           </select>
         ) : (
           ticket.status
