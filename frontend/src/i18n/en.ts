@@ -36,4 +36,9 @@ ticket: {
   created: 'Created',
   author: 'Author',
 },
+nav: {
+  dashboard: 'Dashboard',
+  profile: 'Profile',
+  logout: 'Logout',
+},
 };

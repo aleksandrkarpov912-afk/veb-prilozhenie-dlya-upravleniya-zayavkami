@@ -36,4 +36,9 @@ ticket: {
   created: 'Создан',
   author: 'Автор',
 },
+nav: {
+  dashboard: 'Рабочий стол',
+  profile: 'Профиль',
+  logout: 'Выйти',
+},
 };
