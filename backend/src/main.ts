@@ -7,21 +7,14 @@ import { join } from 'path';
 import * as express from 'express';
 import * as fs from 'fs';
 
-const FRONTEND_URL =
-  process.env.FRONTEND_URL || 'http://localhost:5173';
-
 async function bootstrap() {
   const app =
     await NestFactory.create<NestExpressApplication>(AppModule);
 
   app.getHttpAdapter().getInstance().set('trust proxy', 1);
 
-  // 🔥 FIX CORS (РАБОТАЕТ НА RAILWAY + VERCEL)
   app.enableCors({
-    origin: [
-      FRONTEND_URL,
-      'http://localhost:5173',
-    ],
+    origin: true,
     credentials: true,
   });
 
@@ -34,7 +27,6 @@ async function bootstrap() {
       transform: true,
     }),
   );
-
 
   const uploadsPath = join(__dirname, '..', 'uploads');
 
