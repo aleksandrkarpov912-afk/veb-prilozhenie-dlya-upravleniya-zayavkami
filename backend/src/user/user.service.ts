@@ -4,7 +4,9 @@ import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) {
+    console.log('PRISMA INJECTED');
+  }
 
   async getMe(userId: number) {
     return this.prisma.user.findUnique({
