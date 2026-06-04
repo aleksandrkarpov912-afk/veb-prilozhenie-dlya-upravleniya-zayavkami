@@ -2,7 +2,12 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { getTicket, updateTicketStatus } from '../api/tickets';
+import {
+  getTicket,
+  deleteTicket,
+  updateTicketStatus,
+} from '../api/tickets';
+
 import { getMessages } from '../api/messages';
 import { socket } from '../socket';
 
@@ -70,6 +75,17 @@ export default function TicketDetailsPage() {
     }
   };
 
+  const handleDelete = async () => {
+    if (!confirm('Delete this ticket?')) return;
+
+    try {
+      await deleteTicket(String(ticket.id));
+      navigate('/');
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   if (loading) return <div>{t('loading')}</div>;
   if (!ticket) return <div>Ticket not found</div>;
 
@@ -116,6 +132,23 @@ export default function TicketDetailsPage() {
       </div>
 
       <p>{ticket.description}</p>
+
+      {role === 'ADMIN' && (
+        <button
+          onClick={handleDelete}
+          style={{
+            marginTop: 20,
+            background: 'red',
+            color: '#fff',
+            padding: '8px 12px',
+            border: 'none',
+            borderRadius: 6,
+            cursor: 'pointer',
+          }}
+        >
+          Delete ticket
+        </button>
+      )}
 
       <div style={{ marginTop: 40 }}>
         <h3>{t('ticket.messages')}</h3>
