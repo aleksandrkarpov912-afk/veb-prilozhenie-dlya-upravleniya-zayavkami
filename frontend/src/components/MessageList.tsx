@@ -4,7 +4,11 @@ export default function MessageList({ messages }: any) {
   const { t } = useTranslation();
 
   if (!messages?.length) {
-    return <div style={{ marginBottom: 20 }}>{t('messages.empty')}</div>;
+    return (
+      <div style={{ marginBottom: 20 }}>
+        {t('messages.empty')}
+      </div>
+    );
   }
 
   return (
@@ -23,38 +27,28 @@ export default function MessageList({ messages }: any) {
             style={{
               display: 'flex',
               justifyContent: 'space-between',
-              alignItems: 'center',
-              marginBottom: '4px',
+              marginBottom: 4,
             }}
           >
             <b>{m.user?.email || t('messages.unknownUser')}</b>
-            <span style={{ fontSize: '0.8em', color: '#666' }}>
+
+            <span style={{ fontSize: 12, color: '#666' }}>
               {new Date(m.createdAt).toLocaleString()}
             </span>
           </div>
 
           {m.text && (
-            <div style={{ marginBottom: '8px' }}>
-              <span>{m.text}</span>
+            <div>
+              {m.text}
             </div>
           )}
 
           {m.fileUrl && (
-            <div>
+            <div style={{ marginTop: 8 }}>
               <a
                 href={m.fileUrl}
                 target="_blank"
                 rel="noreferrer"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '4px',
-                  padding: '4px 8px',
-                  backgroundColor: '#f5f5f5',
-                  borderRadius: '4px',
-                  textDecoration: 'none',
-                  color: '#333',
-                }}
               >
                 📎 {t('messages.downloadFile')}
               </a>
