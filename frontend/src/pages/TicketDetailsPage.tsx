@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -91,26 +90,31 @@ export default function TicketDetailsPage() {
   if (!ticket) return <div>Ticket not found</div>;
 
   return (
-    <div style={{ padding: 40, maxWidth: 700 }}>
+    <div style={{ padding: 40, maxWidth: 700, margin: '0 auto' }}>
 
-      <button onClick={() => navigate(-1)}>
-        {t('ticket.back')}
-      </button>
+      {/* BACK BUTTON LEFT EDGE */}
+      <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+        <button onClick={() => navigate(-1)}>
+          {t('ticket.back')}
+        </button>
+      </div>
 
-      {/* HEADER */}
-      <h1>{ticket.title}</h1>
+      {/* TITLE */}
+      <h1 style={{ textAlign: 'center', marginTop: 10 }}>
+        {ticket.title}
+      </h1>
 
-      {/* TOP ROW (EDIT + STATUS + DELETE) */}
+      {/* CONTROL BAR */}
       <div
         style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr auto 1fr',
+          display: 'flex',
+          justifyContent: 'space-between',
           alignItems: 'center',
-          margin: '10px 0',
+          margin: '15px 0',
         }}
       >
 
-        {/* LEFT: actions */}
+        {/* LEFT: EDIT + DELETE */}
         <div style={{ display: 'flex', gap: 10 }}>
           <Link to={`/tickets/edit/${ticket.id}`}>
             <button>{t('edit')}</button>
@@ -123,7 +127,7 @@ export default function TicketDetailsPage() {
           )}
         </div>
 
-        {/* CENTER: status */}
+        {/* CENTER: STATUS */}
         <div>
           {role === 'ADMIN' ? (
             <select
@@ -156,12 +160,14 @@ export default function TicketDetailsPage() {
           )}
         </div>
 
-        {/* RIGHT (empty for баланс) */}
-        <div />
+        {/* RIGHT SPACER */}
+        <div style={{ width: 120 }} />
       </div>
 
       {/* DESCRIPTION */}
-      <p>{ticket.description}</p>
+      <p style={{ textAlign: 'center' }}>
+        {ticket.description}
+      </p>
 
       {/* MESSAGES */}
       <div style={{ marginTop: 40 }}>
