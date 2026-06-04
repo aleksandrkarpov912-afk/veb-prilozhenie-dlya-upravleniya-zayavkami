@@ -1,18 +1,17 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import { createTicket } from '../api/tickets';
 
 export default function CreateTicketPage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const [title, setTitle] = useState('');
-  const [description, setDescription] =
-    useState('');
+  const [description, setDescription] = useState('');
 
-  const [loading, setLoading] =
-    useState(false);
-
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   const handleSubmit = async (
@@ -24,16 +23,12 @@ export default function CreateTicketPage() {
       setLoading(true);
       setError('');
 
-      await createTicket(
-        title,
-        description,
-      );
+      await createTicket(title, description);
 
       navigate('/');
     } catch (err: any) {
       setError(
-        err.response?.data?.message ||
-          'Create ticket failed',
+        err.response?.data?.message || t('create_ticket_failed'),
       );
     } finally {
       setLoading(false);
@@ -41,12 +36,8 @@ export default function CreateTicketPage() {
   };
 
   return (
-    <div
-      style={{
-        padding: 40,
-      }}
-    >
-      <h1>Create Ticket</h1>
+    <div style={{ padding: 40 }}>
+      <h1>{t('createTicket')}</h1>
 
       <form
         onSubmit={handleSubmit}
@@ -59,33 +50,21 @@ export default function CreateTicketPage() {
       >
         <input
           type="text"
-          placeholder="Title"
+          placeholder={t('title')}
           value={title}
-          onChange={(e) =>
-            setTitle(e.target.value)
-          }
+          onChange={(e) => setTitle(e.target.value)}
         />
 
         <textarea
-          placeholder="Description"
+          placeholder={t('description')}
           value={description}
-          onChange={(e) =>
-            setDescription(
-              e.target.value,
-            )
-          }
+          onChange={(e) => setDescription(e.target.value)}
         />
 
-        {error && (
-          <p style={{ color: 'red' }}>
-            {error}
-          </p>
-        )}
+        {error && <p style={{ color: 'red' }}>{error}</p>}
 
         <button disabled={loading}>
-          {loading
-            ? 'Loading...'
-            : 'Create'}
+          {loading ? t('loading') : t('create')}
         </button>
       </form>
     </div>

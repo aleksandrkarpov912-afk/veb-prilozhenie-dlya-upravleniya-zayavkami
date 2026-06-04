@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+
 import api from '../api/axios';
 
 export default function RegisterPage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -30,8 +33,7 @@ export default function RegisterPage() {
       navigate('/login');
     } catch (err: any) {
       setError(
-        err.response?.data?.message ||
-          'Register failed',
+        err.response?.data?.message || t('register_failed'),
       );
     } finally {
       setLoading(false);
@@ -56,49 +58,39 @@ export default function RegisterPage() {
           gap: 12,
         }}
       >
-        <h1>Register</h1>
+        <h1>{t('register')}</h1>
 
         <input
           type="text"
-          placeholder="Name"
+          placeholder={t('name')}
           value={name}
-          onChange={(e) =>
-            setName(e.target.value)
-          }
+          onChange={(e) => setName(e.target.value)}
         />
 
         <input
           type="email"
-          placeholder="Email"
+          placeholder={t('email')}
           value={email}
-          onChange={(e) =>
-            setEmail(e.target.value)
-          }
+          onChange={(e) => setEmail(e.target.value)}
         />
 
         <input
           type="password"
-          placeholder="Password"
+          placeholder={t('password')}
           value={password}
-          onChange={(e) =>
-            setPassword(e.target.value)
-          }
+          onChange={(e) => setPassword(e.target.value)}
         />
 
-        {error && (
-          <p style={{ color: 'red' }}>
-            {error}
-          </p>
-        )}
+        {error && <p style={{ color: 'red' }}>{error}</p>}
 
         <button disabled={loading}>
-          {loading ? 'Loading...' : 'Register'}
+          {loading ? t('loading') : t('register')}
         </button>
 
         <p style={{ marginTop: 16 }}>
-          Уже есть аккаунт?{' '}
+          {t('have_account')} {' '}
           <Link to="/login">
-            Войти
+            {t('login')}
           </Link>
         </p>
       </form>

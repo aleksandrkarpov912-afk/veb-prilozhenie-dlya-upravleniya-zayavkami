@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import { getTickets } from '../api/tickets';
 import type { Ticket } from '../types/ticket';
+import LanguageSwitcher from '../components/LanguageSwitcher';
 
 export default function DashboardPage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [loading, setLoading] = useState(true);
@@ -31,11 +34,8 @@ export default function DashboardPage() {
   }, []);
 
   return (
-    <div
-      style={{
-        padding: 40,
-      }}
-    >
+    <div style={{ padding: 40 }}>
+      {/* HEADER */}
       <div
         style={{
           display: 'flex',
@@ -43,26 +43,24 @@ export default function DashboardPage() {
           marginBottom: 20,
         }}
       >
-        <h1>Dashboard</h1>
+        <h1>{t('dashboard')}</h1>
 
-        <div
-          style={{
-            display: 'flex',
-            gap: 10,
-          }}
-        >
+        <div style={{ display: 'flex', gap: 10 }}>
+          <LanguageSwitcher />
+
           <Link to="/tickets/create">
-            Create Ticket
+            {t('createTicket')}
           </Link>
 
           <button onClick={logout}>
-            Logout
+            {t('logout')}
           </button>
         </div>
       </div>
 
+      {/* CONTENT */}
       {loading ? (
-        <p>Loading...</p>
+        <p>{t('loading')}</p>
       ) : (
         <div
           style={{
@@ -80,13 +78,13 @@ export default function DashboardPage() {
               }}
             >
               <Link to={`/tickets/${ticket.id}`}>
-  <h3>{ticket.title}</h3>
-</Link>
+                <h3>{ticket.title}</h3>
+              </Link>
 
               <p>{ticket.description}</p>
 
               <p>
-                Status: {ticket.status}
+                {t('status')}: {ticket.status}
               </p>
             </div>
           ))}
