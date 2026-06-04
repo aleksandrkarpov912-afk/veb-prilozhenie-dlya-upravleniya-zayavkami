@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import {
   getTicket,
@@ -8,25 +9,25 @@ import {
 } from '../api/tickets';
 
 import { getMessages } from '../api/messages';
-
 import { socket } from '../socket';
+
 import MessageList from '../components/MessageList';
 import MessageForm from '../components/MessageForm';
 
 export default function TicketDetailsPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const [ticket, setTicket] = useState<any>(null);
   const [messages, setMessages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Диагностика: логируем id из URL
+  // Диагностика
   useEffect(() => {
     console.log('URL id:', id);
   }, [id]);
 
-  // Валидация ID на раннем этапе
   const tid = Number(id);
   if (!id || !Number.isFinite(tid) || tid <= 0) {
     return <div style={{ padding: 40 }}>Invalid ticket id</div>;
@@ -85,7 +86,7 @@ export default function TicketDetailsPage() {
   };
 
   if (loading) {
-    return <div style={{ padding: 40 }}>Loading...</div>;
+    return <div style={{ padding: 40 }}>{t('loading')}</div>;
   }
 
   if (!ticket) {
@@ -94,16 +95,21 @@ export default function TicketDetailsPage() {
 
   return (
     <div style={{ padding: 40, maxWidth: 700 }}>
-      <button onClick={() => navigate(-1)}>Back</button>
+      {/* BACK */}
+      <button onClick={() => navigate(-1)}>
+        {t('ticket.back')}
+      </button>
 
       <h1>{ticket.title}</h1>
 
       <div style={{ display: 'flex', gap: 10, marginBottom: 20 }}>
-        <Link to={`/tickets/${ticket.id}/edit`}>Edit</Link>
+        <Link to={`/tickets/${ticket.id}/edit`}>
+          {t('ticket.edit')}
+        </Link>
 
         <button
           onClick={async () => {
-            const confirmed = confirm('Delete ticket?');
+            const confirmed = confirm(t('ticket.delete_confirm'));
             if (!confirmed) return;
 
             try {
@@ -114,14 +120,14 @@ export default function TicketDetailsPage() {
             }
           }}
         >
-          Delete
+          {t('ticket.delete')}
         </button>
       </div>
 
       <p>{ticket.description}</p>
 
       <div style={{ marginTop: 20, marginBottom: 20 }}>
-        <strong>Status:</strong>{' '}
+        <strong>{t('ticket.status')}:</strong>{' '}
 
         {role === 'ADMIN' ? (
           <select
@@ -142,7 +148,7 @@ export default function TicketDetailsPage() {
             <option value="OPEN">OPEN</option>
             <option value="IN_PROGRESS">IN PROGRESS</option>
             <option value="CLOSED">CLOSED</option>
-            <option value="OPEN">REJECTED</option>
+            <option value="REJECTED">REJECTED</option>
           </select>
         ) : (
           ticket.status
@@ -150,26 +156,23 @@ export default function TicketDetailsPage() {
       </div>
 
       <p>
-        <strong>Created:</strong>{' '}
+        <strong>{t('ticket.created')}:</strong>{' '}
         {new Date(ticket.createdAt).toLocaleString()}
       </p>
 
       {ticket.user && (
         <p>
-          <strong>Author:</strong> {ticket.user.email}
+          <strong>{t('ticket.author')}:</strong> {ticket.user.email}
         </p>
       )}
 
-      {/* ================= CHAT ================= */}
+      {/* CHAT */}
       <div style={{ marginTop: 40 }}>
-        <h3>Messages</h3>
+        <h3>{t('ticket.messages')}</h3>
 
         <MessageList messages={messages} />
 
-        <MessageForm
-          ticketId={tid}
-          onMessageSent={loadMessages}
-        />
+        <MessageForm ticketId={tid} onMessageSent={loadMessages} />
       </div>
     </div>
   );
