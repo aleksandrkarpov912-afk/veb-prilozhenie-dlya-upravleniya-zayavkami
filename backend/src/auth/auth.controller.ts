@@ -15,9 +15,7 @@ import { LoginDto } from './dto/login.dto';
 
 @Controller('auth')
 export class AuthController {
-  constructor(
-    private authService: AuthService,
-  ) {}
+  constructor(private authService: AuthService) {}
 
   @Post('register')
   register(@Body() body: RegisterDto) {
@@ -38,7 +36,7 @@ export class AuthController {
 
   @Get('me')
   @UseGuards(AuthGuard('jwt'))
-  me(@Req() req) {
-    return req.user;
+  async me(@Req() req) {
+    return this.authService.getMe(req.user.id);
   }
 }

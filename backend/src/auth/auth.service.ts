@@ -26,9 +26,7 @@ export class AuthService {
       });
 
     if (existingUser) {
-      throw new BadRequestException(
-        'User already exists',
-      );
+      throw new BadRequestException('User already exists');
     }
 
     const hashedPassword =
@@ -48,19 +46,14 @@ export class AuthService {
     return result;
   }
 
-  async login(
-    email: string,
-    password: string,
-  ) {
+  async login(email: string, password: string) {
     const user =
       await this.prisma.user.findUnique({
         where: { email },
       });
 
     if (!user) {
-      throw new BadRequestException(
-        'User not found',
-      );
+      throw new BadRequestException('User not found');
     }
 
     const isValid = await bcrypt.compare(
@@ -69,9 +62,7 @@ export class AuthService {
     );
 
     if (!isValid) {
-      throw new BadRequestException(
-        'Invalid password',
-      );
+      throw new BadRequestException('Invalid password');
     }
 
     const token = this.jwtService.sign({
@@ -86,5 +77,17 @@ export class AuthService {
       access_token: token,
       user: result,
     };
+  }
+
+  async getMe(userId: number) {
+    return this.prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        role: true,
+      },
+    });
   }
 }
