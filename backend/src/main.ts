@@ -37,11 +37,7 @@ async function bootstrap() {
 
   app.use('/uploads', express.static(uploadsPath));
 
-  const port = Number(process.env.PORT);
-
-  if (!port) {
-    throw new Error('PORT is not defined');
-  }
+  const port = process.env.PORT ? Number(process.env.PORT) : 8080;
 
   await app.listen(port, '0.0.0.0');
 
