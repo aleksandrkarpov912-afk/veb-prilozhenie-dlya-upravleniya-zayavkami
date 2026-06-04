@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -92,73 +93,75 @@ export default function TicketDetailsPage() {
   return (
     <div style={{ padding: 40, maxWidth: 700 }}>
 
-      {/* BACK BUTTON */}
       <button onClick={() => navigate(-1)}>
         {t('ticket.back')}
       </button>
 
-      {/* EDIT BUTTON (ВЫШЕ СТАТУСА) */}
-      <div style={{ marginTop: 15 }}>
-        <Link to={`/tickets/edit/${ticket.id}`}>
-          <button>{t('edit')}</button>
-        </Link>
-      </div>
+      {/* HEADER */}
+      <h1>{ticket.title}</h1>
 
-      <h1 style={{ marginTop: 20 }}>{ticket.title}</h1>
-
-      {/* STATUS CENTERED */}
+      {/* TOP ROW (EDIT + STATUS + DELETE) */}
       <div
         style={{
-          margin: '20px 0',
-          display: 'flex',
-          justifyContent: 'center',
+          display: 'grid',
+          gridTemplateColumns: '1fr auto 1fr',
           alignItems: 'center',
-          gap: 10,
+          margin: '10px 0',
         }}
       >
-        <strong>{t('ticket.status')}:</strong>
 
-        {role === 'ADMIN' ? (
-          <select
-            value={ticket.status}
-            onChange={async (e) => {
-              const updated = await updateTicketStatus(
-                String(ticket.id),
-                e.target.value,
-              );
-              setTicket(updated);
-            }}
-          >
-            {Object.values(TICKET_STATUS).map((s) => (
-              <option key={s} value={s}>
-                {s}
-              </option>
-            ))}
-          </select>
-        ) : (
-          <span
-            style={{
-              background: getStatusColor(ticket.status),
-              color: '#fff',
-              padding: '4px 8px',
-              borderRadius: 6,
-            }}
-          >
-            {ticket.status}
-          </span>
-        )}
+        {/* LEFT: actions */}
+        <div style={{ display: 'flex', gap: 10 }}>
+          <Link to={`/tickets/edit/${ticket.id}`}>
+            <button>{t('edit')}</button>
+          </Link>
+
+          {role === 'ADMIN' && (
+            <button onClick={handleDelete}>
+              {t('delete')}
+            </button>
+          )}
+        </div>
+
+        {/* CENTER: status */}
+        <div>
+          {role === 'ADMIN' ? (
+            <select
+              value={ticket.status}
+              onChange={async (e) => {
+                const updated = await updateTicketStatus(
+                  String(ticket.id),
+                  e.target.value,
+                );
+                setTicket(updated);
+              }}
+            >
+              {Object.values(TICKET_STATUS).map((s) => (
+                <option key={s} value={s}>
+                  {s}
+                </option>
+              ))}
+            </select>
+          ) : (
+            <span
+              style={{
+                background: getStatusColor(ticket.status),
+                color: '#fff',
+                padding: '4px 8px',
+                borderRadius: 6,
+              }}
+            >
+              {ticket.status}
+            </span>
+          )}
+        </div>
+
+        {/* RIGHT (empty for баланс) */}
+        <div />
       </div>
 
+      {/* DESCRIPTION */}
       <p>{ticket.description}</p>
-
-      {/* DELETE */}
-      {role === 'ADMIN' && (
-        <div style={{ marginTop: 20 }}>
-          <button onClick={handleDelete}>
-            {t('delete')}
-          </button>
-        </div>
-      )}
 
       {/* MESSAGES */}
       <div style={{ marginTop: 40 }}>
@@ -166,7 +169,6 @@ export default function TicketDetailsPage() {
         <MessageList messages={messages} />
         <MessageForm ticketId={Number(id)} onMessageSent={loadMessages} />
       </div>
-
     </div>
   );
 }
