@@ -10,7 +10,7 @@ export default function Profile() {
   const [form, setForm] = useState({
     name: '',
     email: '',
-    password: '', // всегда пустой при загрузке
+    password: '',
   });
 
   const [loading, setLoading] = useState(false);
@@ -21,9 +21,9 @@ export default function Profile() {
         const res = await getMe();
 
         setForm({
-          name: res.data.name || '',
-          email: res.data.email || '',
-          password: '', // 🚀 всегда очищаем
+          name: res.data.name ?? '',
+          email: res.data.email ?? '',
+          password: '',
         });
       } catch (err) {
         console.error(err);
@@ -34,10 +34,11 @@ export default function Profile() {
   }, []);
 
   const handleUpdate = async () => {
+    if (!form.name.trim() || !form.email.trim()) return;
+
     setLoading(true);
 
     try {
-      // 🚀 отправляем только заполненные поля
       const payload: any = {
         name: form.name,
         email: form.email,
@@ -49,8 +50,10 @@ export default function Profile() {
 
       await updateProfile(payload);
 
-      // очищаем пароль после обновления
-      setForm((prev) => ({ ...prev, password: '' }));
+      setForm((prev) => ({
+        ...prev,
+        password: '',
+      }));
 
       alert(t('profile.updated'));
     } catch (e) {
