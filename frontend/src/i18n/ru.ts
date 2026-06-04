@@ -32,7 +32,6 @@ ticket: {
   edit: 'Редактировать',
   delete: 'Удалить',
   status: 'Статус',
-  messages: 'Сообщения',
   created: 'Создан',
   author: 'Автор',
 },
@@ -40,5 +39,9 @@ nav: {
   dashboard: 'Рабочий стол',
   profile: 'Профиль',
   logout: 'Выйти',
+},
+messages: {
+  messages: 'Сообщения',
+  empty: 'Сообщений пока нет',
 },
 };

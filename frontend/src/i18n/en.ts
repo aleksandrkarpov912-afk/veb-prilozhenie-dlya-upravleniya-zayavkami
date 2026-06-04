@@ -41,4 +41,7 @@ nav: {
   profile: 'Profile',
   logout: 'Logout',
 },
+messages: {
+  empty: 'No messages yet',
+},
 };
