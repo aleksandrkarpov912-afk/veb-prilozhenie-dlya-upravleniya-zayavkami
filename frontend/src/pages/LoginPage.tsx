@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import api from '../api/axios';
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -60,44 +62,32 @@ export default function LoginPage() {
           gap: 12,
         }}
       >
-        <h1>Login</h1>
+        <h1>{t('login')}</h1>
 
         <input
           type="email"
-          placeholder="Email"
+          placeholder={t('email')}
           value={email}
-          onChange={(e) =>
-            setEmail(e.target.value)
-          }
+          onChange={(e) => setEmail(e.target.value)}
         />
 
         <input
           type="password"
-          placeholder="Password"
+          placeholder={t('password')}
           value={password}
-          onChange={(e) =>
-            setPassword(e.target.value)
-          }
+          onChange={(e) => setPassword(e.target.value)}
         />
 
-        {error && (
-          <p style={{ color: 'red' }}>
-            {error}
-          </p>
-        )}
+        {error && <p style={{ color: 'red' }}>{error}</p>}
 
         <button disabled={loading}>
-          {loading ? 'Loading...' : 'Login'}
+          {loading ? t('loading') : t('login')}
         </button>
 
-        <p
-          style={{
-            marginTop: 16,
-          }}
-        >
-          Нет аккаунта?{' '}
+        <p style={{ marginTop: 16 }}>
+          {t('no_account')} {' '}
           <Link to="/register">
-            Зарегистрироваться
+            {t('register')}
           </Link>
         </p>
       </form>
