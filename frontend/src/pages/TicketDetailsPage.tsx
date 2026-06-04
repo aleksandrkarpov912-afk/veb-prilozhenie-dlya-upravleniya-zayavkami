@@ -21,15 +21,17 @@ export default function TicketDetailsPage() {
   const [messages, setMessages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const role = (() => {
+  // Исправлено: явное определение функции с возвратом значения
+  const getRole = () => {
     const token = localStorage.getItem('token');
     if (!token) return '';
     try {
-      return JSON.parse(atob(token.split('.')[1](https://blog.logrocket.com/using-hooks-react-router/)))?.role || '';
+      return JSON.parse(atob(token.split('.')))?.role || '';
     } catch {
       return '';
     }
-  })();
+  };
+  const role = getRole();
 
   useEffect(() => {
     fetchTicket();
