@@ -44,4 +44,9 @@ messages: {
   messages: 'Сообщения',
   empty: 'Сообщений пока нет',
 },
+ statusValues: {
+    OPEN: 'Открыта',
+    IN_PROGRESS: 'В процессе',
+    CLOSED: 'Закрыта',
+    REJECTED: 'Отклонена',
 };

@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { getTickets } from '../api/tickets';
 import type { Ticket } from '../types/ticket';
 import LanguageSwitcher from '../components/LanguageSwitcher';
+import { getStatusLabel } from '../utils/status';
 
 export default function DashboardPage() {
   const navigate = useNavigate();
@@ -35,14 +36,7 @@ export default function DashboardPage() {
 
   return (
     <div style={{ padding: 40 }}>
-      {/* HEADER */}
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          marginBottom: 20,
-        }}
-      >
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 20 }}>
         <h1>{t('dashboard')}</h1>
 
         <div style={{ display: 'flex', gap: 10 }}>
@@ -52,31 +46,22 @@ export default function DashboardPage() {
             {t('createTicket')}
           </Link>
 
+          <Link to="/profile">
+            {t('nav.profile')}
+          </Link>
+
           <button onClick={logout}>
             {t('logout')}
           </button>
         </div>
       </div>
 
-      {/* CONTENT */}
       {loading ? (
         <p>{t('loading')}</p>
       ) : (
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 12,
-          }}
-        >
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           {tickets.map((ticket) => (
-            <div
-              key={ticket.id}
-              style={{
-                border: '1px solid #ccc',
-                padding: 16,
-              }}
-            >
+            <div key={ticket.id} style={{ border: '1px solid #ccc', padding: 16 }}>
               <Link to={`/tickets/${ticket.id}`}>
                 <h3>{ticket.title}</h3>
               </Link>
@@ -84,7 +69,7 @@ export default function DashboardPage() {
               <p>{ticket.description}</p>
 
               <p>
-                {t('status')}: {ticket.status}
+                {t('status')}: {getStatusLabel(t, ticket.status)}
               </p>
             </div>
           ))}

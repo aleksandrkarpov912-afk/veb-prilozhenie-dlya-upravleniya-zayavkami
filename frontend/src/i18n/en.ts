@@ -44,4 +44,10 @@ nav: {
 messages: {
   empty: 'No messages yet',
 },
+statusValues: {
+    OPEN: 'Open',
+    IN_PROGRESS: 'In progress',
+    CLOSED: 'Closed',
+    REJECTED: 'Rejected',
+  },
 };
