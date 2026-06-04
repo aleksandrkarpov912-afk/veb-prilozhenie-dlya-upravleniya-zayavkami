@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -76,10 +76,10 @@ export default function TicketDetailsPage() {
   };
 
   const handleDelete = async () => {
-    if (!confirm('Delete this ticket?')) return;
+    if (!window.confirm(t('ticket.delete_confirm'))) return;
 
     try {
-      await deleteTicket(String(ticket.id));
+      await deleteTicket(String(id));
       navigate('/');
     } catch (err) {
       console.error(err);
@@ -97,8 +97,8 @@ export default function TicketDetailsPage() {
 
       <h1>{ticket.title}</h1>
 
-      <div style={{ margin: '10px 0' }}>
-        <strong>{t('ticket.status')}:</strong>{' '}
+      <div style={{ margin: '10px 0', display: 'flex', gap: 10 }}>
+        <strong>{t('ticket.status')}:</strong>
 
         {role === 'ADMIN' ? (
           <select
@@ -133,22 +133,17 @@ export default function TicketDetailsPage() {
 
       <p>{ticket.description}</p>
 
-      {role === 'ADMIN' && (
-        <button
-          onClick={handleDelete}
-          style={{
-            marginTop: 20,
-            background: 'red',
-            color: '#fff',
-            padding: '8px 12px',
-            border: 'none',
-            borderRadius: 6,
-            cursor: 'pointer',
-          }}
-        >
-          Delete ticket
-        </button>
-      )}
+      <div style={{ marginTop: 20, display: 'flex', gap: 10 }}>
+        <Link to={`/tickets/edit/${ticket.id}`}>
+          <button>{t('edit')}</button>
+        </Link>
+
+        {role === 'ADMIN' && (
+          <button onClick={handleDelete}>
+            {t('delete')}
+          </button>
+        )}
+      </div>
 
       <div style={{ marginTop: 40 }}>
         <h3>{t('ticket.messages')}</h3>
