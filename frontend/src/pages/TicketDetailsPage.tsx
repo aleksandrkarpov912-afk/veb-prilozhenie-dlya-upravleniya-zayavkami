@@ -2,12 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import {
-  getTicket,
-  deleteTicket,
-  updateTicketStatus,
-} from '../api/tickets';
-
+import { getTicket, updateTicketStatus } from '../api/tickets';
 import { getMessages } from '../api/messages';
 import { socket } from '../socket';
 
