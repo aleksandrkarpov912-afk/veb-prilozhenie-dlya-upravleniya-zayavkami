@@ -4,8 +4,10 @@ export default {
   email: 'Почта',
   password: 'Пароль',
   name: 'Имя',
+
   no_account: 'Нет аккаунта?',
-have_account: 'Уже есть аккаунт?',
+  have_account: 'Уже есть аккаунт?',
+
   logout: 'Выйти',
   dashboard: 'Рабочий стол',
   createTicket: 'Создать заявку',
@@ -19,34 +21,37 @@ have_account: 'Уже есть аккаунт?',
   delete: 'Удалить',
   back: 'Назад',
   messages: 'Сообщения',
+
   profile: {
-  title: 'Профиль',
-  name: 'Имя',
-  email: 'Почта',
-  password: 'Новый пароль',
-  save: 'Сохранить',
-  updated: 'Профиль обновлён',
-},
-ticket: {
-  back: 'Назад',
-  edit: 'Редактировать',
-  delete: 'Удалить',
-  status: 'Статус',
-  created: 'Создан',
-  author: 'Автор',
-},
-nav: {
-  dashboard: 'Рабочий стол',
-  profile: 'Профиль',
-  logout: 'Выйти',
-},
-messages: {
-  messages: 'Сообщения',
-  empty: 'Сообщений пока нет',
-},
- statusValues: {
+    title: 'Профиль',
+    name: 'Имя',
+    email: 'Почта',
+    password: 'Новый пароль',
+    save: 'Сохранить',
+    updated: 'Профиль обновлён',
+  },
+
+  ticket: {
+    back: 'Назад',
+    edit: 'Редактировать',
+    delete: 'Удалить',
+    delete_confirm: 'Удалить заявку?',
+    status: 'Статус',
+    messages: 'Сообщения',
+    created: 'Создан',
+    author: 'Автор',
+  },
+
+  statusValues: {
     OPEN: 'Открыта',
     IN_PROGRESS: 'В процессе',
     CLOSED: 'Закрыта',
     REJECTED: 'Отклонена',
+  },
+
+  nav: {
+    dashboard: 'Рабочий стол',
+    profile: 'Профиль',
+    logout: 'Выйти',
+  },
 };
