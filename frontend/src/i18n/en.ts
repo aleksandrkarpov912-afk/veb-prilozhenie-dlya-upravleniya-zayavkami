@@ -4,6 +4,8 @@ export default {
   email: 'Email',
   password: 'Password',
   name: 'Name',
+  no_account: 'No account?',
+have_account: 'Already have account?',
   logout: 'Logout',
   dashboard: 'Dashboard',
   createTicket: 'Create Ticket',

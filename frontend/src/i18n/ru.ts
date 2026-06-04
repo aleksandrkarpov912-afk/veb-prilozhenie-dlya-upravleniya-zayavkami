@@ -4,6 +4,8 @@ export default {
   email: 'Почта',
   password: 'Пароль',
   name: 'Имя',
+  no_account: 'Нет аккаунта?',
+have_account: 'Уже есть аккаунт?',
   logout: 'Выйти',
   dashboard: 'Дашборд',
   createTicket: 'Создать тикет',

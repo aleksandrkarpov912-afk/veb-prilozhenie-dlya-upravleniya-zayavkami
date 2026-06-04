@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
+import LanguageSwitcher from '../components/LanguageSwitcher';
 import api from '../api/axios';
 
 export default function RegisterPage() {
@@ -43,12 +44,18 @@ export default function RegisterPage() {
   return (
     <div
       style={{
+        position: 'relative',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         height: '100vh',
       }}
     >
+      {/* LANGUAGE SWITCHER */}
+      <div style={{ position: 'absolute', top: 20, right: 20 }}>
+        <LanguageSwitcher />
+      </div>
+
       <form
         onSubmit={handleRegister}
         style={{
@@ -87,6 +94,7 @@ export default function RegisterPage() {
           {loading ? t('loading') : t('register')}
         </button>
 
+        {/* FIXED LINK */}
         <p style={{ marginTop: 16 }}>
           {t('have_account')} {' '}
           <Link to="/login">
