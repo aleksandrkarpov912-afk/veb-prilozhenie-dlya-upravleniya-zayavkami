@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 
 import { getTickets } from '../api/tickets';
 import type { Ticket } from '../types/ticket';
-import LanguageSwitcher from '../components/LanguageSwitcher';
 import { getStatusLabel } from '../utils/status';
 
 export default function DashboardPage() {
@@ -40,15 +39,12 @@ export default function DashboardPage() {
         <h1>{t('dashboard')}</h1>
 
         <div style={{ display: 'flex', gap: 10 }}>
-          <LanguageSwitcher />
+        
 
           <Link to="/tickets/create">
             {t('createTicket')}
           </Link>
 
-          <Link to="/profile">
-            {t('nav.profile')}
-          </Link>
 
           <button onClick={logout}>
             {t('logout')}
