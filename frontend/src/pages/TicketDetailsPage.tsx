@@ -134,7 +134,7 @@ export default function TicketDetailsPage() {
       <p>{ticket.description}</p>
 
       <div style={{ marginTop: 20, display: 'flex', gap: 10 }}>
-        <Link to={`/tickets/edit/${ticket.id}`}>
+        <Link to={`/tickets/${ticket.id}/edit`}>
           <button>{t('edit')}</button>
         </Link>
 
