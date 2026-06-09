@@ -46,7 +46,7 @@ export default function TicketDetailsPage() {
 
     const handler = (msg: any) => {
       setMessages((prev) => [...prev, msg]);
-    };
+    });
 
     socket.on('newMessage', handler);
 
@@ -90,14 +90,26 @@ export default function TicketDetailsPage() {
   if (!ticket) return <div>Ticket not found</div>;
 
   return (
-    <div style={{ padding: 40, maxWidth: 700 }}>
-      <button onClick={() => navigate(-1)}>
+    <div style={{ padding: 40, maxWidth: 700, margin: '0 auto', textAlign: 'center' }}>
+      <button style={{ marginBottom: 20 }} onClick={() => navigate(-1)}>
         {t('ticket.back')}
       </button>
 
-      <h1>{ticket.title}</h1>
+      <h1 style={{ marginBottom: 20 }}>{ticket.title}</h1>
 
-      <div style={{ margin: '10px 0', display: 'flex', gap: 10 }}>
+      <div style={{ display: 'flex', justifyContent: 'center', gap: 10, marginBottom: 20 }}>
+        <Link to={`/tickets/${ticket.id}/edit`}>
+          {t('edit')}
+        </Link>
+
+        {role === 'ADMIN' && (
+          <button onClick={handleDelete}>
+            {t('delete')}
+          </button>
+        )}
+      </div>
+
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 10 }}>
         <strong>{t('ticket.status')}:</strong>
 
         {role === 'ADMIN' ? (
@@ -131,31 +143,21 @@ export default function TicketDetailsPage() {
         )}
       </div>
 
-      <p>{ticket.description}</p>
+      <p style={{ marginTop: 20 }}>{ticket.description}</p>
 
-      <div style={{ marginTop: 20, display: 'flex', gap: 10 }}>
-        <Link to={`/tickets/${ticket.id}/edit`}>
-          <button>{t('edit')}</button>
-        </Link>
+      <div style={{ marginTop: 20 }}>
+        <p>
+          <strong>{t('ticket.created')}:</strong>{' '}
+          {new Date(ticket.createdAt).toLocaleString()}
+        </p>
 
-        {role === 'ADMIN' && (
-          <button onClick={handleDelete}>
-            {t('delete')}
-          </button>
+        {ticket.user && (
+          <p>
+            <strong>{t('ticket.author')}:</strong>{' '}
+            {ticket.user.email}
+          </p>
         )}
       </div>
-
-      <p>
-        <strong>{t('ticket.created')}:</strong>{' '}
-        {new Date(ticket.createdAt).toLocaleString()}
-      </p>
-
-      {ticket.user && (
-        <p>
-          <strong>{t('ticket.author')}:</strong>{' '}
-          {ticket.user.email}
-        </p>
-      )}
 
       <div style={{ marginTop: 40 }}>
         <h3>{t('ticket.messages')}</h3>
