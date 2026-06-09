@@ -86,8 +86,8 @@ export default function TicketDetailsPage() {
     }
   };
 
-  if (loading) return <div style={{ padding: 40 }}>{t('loading')}</div>;
-  if (!ticket) return <div style={{ padding: 40 }}>Ticket not found</div>;
+  if (loading) return <div>{t('loading')}</div>;
+  if (!ticket) return <div>Ticket not found</div>;
 
   return (
     <div style={{ padding: 40, maxWidth: 700 }}>
@@ -133,29 +133,34 @@ export default function TicketDetailsPage() {
 
       <p>{ticket.description}</p>
 
-      <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>
+      <div style={{ marginTop: 20 }}>
         <Link to={`/tickets/${ticket.id}/edit`}>
           {t('edit')}
         </Link>
 
         {role === 'ADMIN' && (
-          <button onClick={handleDelete}>
-            {t('delete')}
-          </button>
+          <>
+            {' '}
+            <button onClick={handleDelete}>
+              {t('delete')}
+            </button>
+          </>
         )}
       </div>
 
-      <p style={{ marginTop: 20 }}>
-        <strong>{t('ticket.created')}:</strong>{' '}
-        {new Date(ticket.createdAt).toLocaleString()}
-      </p>
-
-      {ticket.user && (
+      <div style={{ marginTop: 20 }}>
         <p>
-          <strong>{t('ticket.author')}:</strong>{' '}
-          {ticket.user.email}
+          <strong>{t('ticket.created')}:</strong>{' '}
+          {new Date(ticket.createdAt).toLocaleString()}
         </p>
-      )}
+
+        {ticket.user && (
+          <p>
+            <strong>{t('ticket.author')}:</strong>{' '}
+            {ticket.user.email}
+          </p>
+        )}
+      </div>
 
       <div style={{ marginTop: 40 }}>
         <h3>{t('ticket.messages')}</h3>
