@@ -18,6 +18,7 @@ import { UpdateTicketDto } from './dto/update-ticket.dto';
 import { UpdateTicketStatusDto } from './dto/update-ticket-status.dto';
 
 import { TicketsService } from './tickets.service';
+
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 
@@ -37,15 +38,29 @@ export class TicketsController {
 
   @UseGuards(AuthGuard('jwt'))
   @Get('my')
-  myTickets(@Req() req) {
-    return this.ticketsService.myTickets(req.user.id);
+  myTickets(
+    @Req() req,
+    @Query('page') page = 1,
+    @Query('limit') limit = 10,
+  ) {
+    return this.ticketsService.myTickets(
+      req.user.id,
+      Number(page),
+      Number(limit),
+    );
   }
 
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('ADMIN')
   @Get()
-  findAll() {
-    return this.ticketsService.findAll();
+  findAll(
+    @Query('page') page = 1,
+    @Query('limit') limit = 10,
+  ) {
+    return this.ticketsService.findAll(
+      Number(page),
+      Number(limit),
+    );
   }
 
   @UseGuards(AuthGuard('jwt'))
@@ -88,14 +103,5 @@ export class TicketsController {
       Number(id),
       req.user,
     );
-  }
-
-  @UseGuards(AuthGuard('jwt'))
-  @Get()
-  getAll(
-    @Query('page') page: number,
-    @Query('limit') limit: number,
-  ) {
-    return this.ticketsService.findAll(page, limit);
   }
 }

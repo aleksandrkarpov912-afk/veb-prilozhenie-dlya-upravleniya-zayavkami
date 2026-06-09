@@ -25,22 +25,24 @@ export class TicketsService {
     });
   }
 
-  async myTickets(userId: number) {
-    return this.prisma.ticket.findMany({
-      where: { userId },
-      orderBy: { createdAt: 'desc' },
-    });
-  }
-
-  async findAll(page = 1, limit = 10) {
+  async myTickets(
+    userId: number,
+    page = 1,
+    limit = 10,
+  ) {
     const skip = (page - 1) * limit;
 
-    const [data, total] = await this.prisma.ticket.findAndCount({
-      skip,
-      take: limit,
-      include: { user: true },
-      orderBy: { id: 'DESC' },
-    });
+    const [data, total] = await Promise.all([
+      this.prisma.ticket.findMany({
+        where: { userId },
+        skip,
+        take: limit,
+        orderBy: { createdAt: 'desc' },
+      }),
+      this.prisma.ticket.count({
+        where: { userId },
+      }),
+    ]);
 
     return {
       data,
@@ -50,11 +52,28 @@ export class TicketsService {
     };
   }
 
-  async findAllLegacy() {
-    return this.prisma.ticket.findMany({
-      include: { user: true },
-      orderBy: { createdAt: 'desc' },
-    });
+  async findAll(
+    page = 1,
+    limit = 10,
+  ) {
+    const skip = (page - 1) * limit;
+
+    const [data, total] = await Promise.all([
+      this.prisma.ticket.findMany({
+        skip,
+        take: limit,
+        include: { user: true },
+        orderBy: { id: 'desc' },
+      }),
+      this.prisma.ticket.count(),
+    ]);
+
+    return {
+      data,
+      total,
+      page,
+      totalPages: Math.ceil(total / limit),
+    };
   }
 
   async findOne(id: number) {
@@ -110,13 +129,14 @@ export class TicketsService {
 
     return this.prisma.ticket.update({
       where: { id },
-      data: {
-        status,
-      },
+      data: { status },
     });
   }
 
-  async remove(id: number, user: any) {
+  async remove(
+    id: number,
+    user: any,
+  ) {
     const ticket = await this.prisma.ticket.findUnique({
       where: { id },
     });
