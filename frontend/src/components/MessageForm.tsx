@@ -57,7 +57,6 @@ export default function MessageForm({
       setText(e.target.value);
     }
   }}
-  placeholder={t('messagesBlock.writeMessage')}
   rows={4}
   maxLength={1000}
   style={{
