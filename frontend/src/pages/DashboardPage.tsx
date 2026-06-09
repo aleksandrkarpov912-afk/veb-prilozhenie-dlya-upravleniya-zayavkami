@@ -13,15 +13,6 @@ export default function DashboardPage() {
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const truncate = (
-    text: string,
-    max = 120,
-  ) => {
-    return text.length > max
-      ? text.slice(0, max) + '...'
-      : text;
-  };
-
   const logout = () => {
     localStorage.removeItem('token');
     navigate('/login');
@@ -46,15 +37,9 @@ export default function DashboardPage() {
     <div style={{ padding: 40 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 20 }}>
         <h1>{t('dashboard')}</h1>
-
         <div style={{ display: 'flex', gap: 10 }}>
-          <Link to="/tickets/create">
-            {t('createTicket')}
-          </Link>
-
-          <button onClick={logout}>
-            {t('logout')}
-          </button>
+          <Link to="/tickets/create">{t('createTicket')}</Link>
+          <button onClick={logout}>{t('logout')}</button>
         </div>
       </div>
 
@@ -65,17 +50,30 @@ export default function DashboardPage() {
           {tickets.map((ticket) => (
             <div key={ticket.id} style={{ border: '1px solid #ccc', padding: 16 }}>
               <Link to={`/tickets/${ticket.id}`}>
-                <h3>{ticket.title}</h3>
+                <h3
+                  style={{
+                    margin: 0,
+                    overflowWrap: 'anywhere',
+                    wordBreak: 'break-all',
+                  }}
+                >
+                  {ticket.title}
+                </h3>
               </Link>
 
+              {/* Обрезка по строкам через браузер */}
               <p
                 style={{
                   whiteSpace: 'pre-wrap',
-                  overflowWrap: 'break-word',
+                  overflowWrap: 'anywhere',
                   wordBreak: 'break-word',
+                  overflow: 'hidden',
+                  display: '-webkit-box',
+                  WebkitLineClamp: 3,
+                  WebkitBoxOrient: 'vertical',
                 }}
               >
-                {truncate(ticket.description, 120)}
+                {ticket.description}
               </p>
 
               <p>

@@ -96,13 +96,14 @@ export default function TicketDetailsPage() {
       </button>
 
       <h1
-        style={{
-          overflowWrap: 'break-word',
-          wordBreak: 'break-word',
-        }}
-      >
-        {ticket.title}
-      </h1>
+  style={{
+    maxWidth: '100%',
+    overflowWrap: 'anywhere',
+    wordBreak: 'break-all',
+  }}
+>
+  {ticket.title}
+</h1>
 
       <div style={{ marginTop: 20, display: 'flex', gap: 10 }}>
         <Link to={`/tickets/${ticket.id}/edit`}>
