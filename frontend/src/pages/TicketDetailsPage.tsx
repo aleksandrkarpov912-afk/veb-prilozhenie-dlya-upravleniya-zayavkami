@@ -99,11 +99,15 @@ export default function TicketDetailsPage() {
   style={{
     maxWidth: '100%',
     overflowWrap: 'anywhere',
-    wordBreak: 'break-all',
+    wordBreak: 'break-word',
+    lineHeight: 1.6, 
+    margin: '16px 0',
+    fontSize: '1.5rem', 
   }}
 >
   {ticket.title}
 </h1>
+
 
       <div style={{ marginTop: 20, display: 'flex', gap: 10 }}>
         <Link to={`/tickets/${ticket.id}/edit`}>

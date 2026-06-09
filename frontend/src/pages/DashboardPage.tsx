@@ -61,7 +61,6 @@ export default function DashboardPage() {
                 </h3>
               </Link>
 
-              {/* Обрезка по строкам через браузер */}
               <p
                 style={{
                   whiteSpace: 'pre-wrap',
