@@ -1,22 +1,20 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import api from '../api/axios';
 
 export default function MessageForm({
   ticketId,
   onMessageSent,
 }: any) {
+  const { t } = useTranslation();
+
   const [text, setText] = useState('');
   const [file, setFile] = useState<File | null>(null);
 
   const handleSend = async () => {
-    console.log('ticketId:', ticketId);
-
     const tid = Number(ticketId);
 
-    if (!Number.isFinite(tid) || tid <= 0) {
-      console.error('Invalid ticketId:', ticketId);
-      return;
-    }
+    if (!Number.isFinite(tid) || tid <= 0) return;
 
     const trimmed = text.trim();
 
@@ -27,43 +25,27 @@ export default function MessageForm({
       formData.append('file', file);
 
       try {
-        console.log('Starting file upload...', {
-          fileName: file.name,
-          fileSize: file.size,
+        const res = await api.post('/messages/upload', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
         });
 
-        const res = await api.post('/messages/upload', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
         fileUrl = res.data.url;
-        console.log('File uploaded successfully:', fileUrl);
-      } catch (uploadErr) {
-        console.error('File upload failed:', uploadErr);
+      } catch {
         return;
       }
     }
 
-    // Проверка: хотя бы одно поле должно быть заполнено
-    if (!trimmed && !fileUrl) {
-      console.log('Empty message blocked on frontend');
-      return;
-    }
+    if (!trimmed && !fileUrl) return;
 
     const payload: any = {};
     if (trimmed) payload.text = trimmed;
     if (fileUrl) payload.fileUrl = fileUrl;
 
-    try {
-      console.log('Sending message:', { ticketId: tid, payload });
-      await api.post(`/messages/${tid}`, payload);
-      setText('');
-      setFile(null);
-      onMessageSent?.();
-    } catch (err) {
-      console.error('Failed to send message:', err);
-    }
+    await api.post(`/messages/${tid}`, payload);
+
+    setText('');
+    setFile(null);
+    onMessageSent?.();
   };
 
   return (
@@ -71,15 +53,17 @@ export default function MessageForm({
       <input
         value={text}
         onChange={(e) => setText(e.target.value)}
-        placeholder="Write message..."
+        placeholder={t('messages.writeMessage')}
       />
+
       <input
         type="file"
-        onChange={(e) =>
-          setFile(e.target.files?.[0] || null)
-        }
+        onChange={(e) => setFile(e.target.files?.[0] || null)}
       />
-      <button onClick={handleSend}>Send</button>
+
+      <button onClick={handleSend}>
+        {t('messages.send')}
+      </button>
     </div>
   );
 }

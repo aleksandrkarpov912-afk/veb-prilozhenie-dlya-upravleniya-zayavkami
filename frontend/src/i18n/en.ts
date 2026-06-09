@@ -60,8 +60,11 @@ export default {
   },
 
   messagesBlock: {
-    empty: 'No messages yet',
-    unknownUser: 'Unknown user',
-    downloadFile: 'Download file',
-  },
+  empty: 'No messages yet',
+  unknownUser: 'Unknown user',
+  downloadFile: 'Download file',
+
+  writeMessage: 'Write message...',
+  send: 'Send',
+},
 };
