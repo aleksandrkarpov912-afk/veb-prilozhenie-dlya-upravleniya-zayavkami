@@ -16,7 +16,7 @@ const getRoleFromToken = () => {
   }
 };
 
-export const getTickets = async () => {
+export const getTickets = async (page = 1, limit = 10) => {
   const role = getRoleFromToken();
 
   const endpoint =
@@ -24,7 +24,9 @@ export const getTickets = async () => {
       ? '/tickets'
       : '/tickets/my';
 
-  const response = await api.get(endpoint);
+  const response = await api.get(endpoint, {
+    params: { page, limit },
+  });
 
   return response.data;
 };
