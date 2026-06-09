@@ -37,7 +37,18 @@ export default function MessageList({ messages }: any) {
             </span>
           </div>
 
-          {m.text && <div>{m.text}</div>}
+          {m.text && (
+  <div
+    style={{
+      whiteSpace: 'pre-wrap',
+      overflowWrap: 'break-word',
+      wordBreak: 'break-word',
+      maxWidth: '100%',
+    }}
+  >
+    {m.text}
+  </div>
+)}
 
           {m.fileUrl && (
             <div style={{ marginTop: 8 }}>

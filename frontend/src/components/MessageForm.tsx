@@ -50,11 +50,33 @@ export default function MessageForm({
 
   return (
     <div>
-      <input
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        placeholder={t('messages.writeMessage')}
-      />
+      <textarea
+  value={text}
+  onChange={(e) => {
+    if (e.target.value.length <= 1000) {
+      setText(e.target.value);
+    }
+  }}
+  placeholder={t('messagesBlock.writeMessage')}
+  rows={4}
+  maxLength={1000}
+  style={{
+    width: '100%',
+    resize: 'vertical',
+    padding: '8px',
+    boxSizing: 'border-box',
+  }}
+/>
+
+<div
+  style={{
+    textAlign: 'right',
+    fontSize: 12,
+    color: '#666',
+  }}
+>
+  {text.length}/1000
+</div>
 
       <input
         type="file"
