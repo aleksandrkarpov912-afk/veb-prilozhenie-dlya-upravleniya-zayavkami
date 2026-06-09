@@ -4,6 +4,7 @@ export default {
   email: 'Email',
   password: 'Password',
   name: 'Name',
+
   no_account: 'No account?',
   have_account: 'Already have account?',
 
@@ -56,5 +57,11 @@ export default {
     IN_PROGRESS: 'In progress',
     CLOSED: 'Closed',
     REJECTED: 'Rejected',
+  },
+
+  messages: {
+    empty: 'No messages yet',
+    unknownUser: 'Unknown user',
+    downloadFile: 'Download file',
   },
 };

@@ -11,15 +11,19 @@ export default {
   logout: 'Выйти',
   dashboard: 'Рабочий стол',
   createTicket: 'Создать заявку',
+
   title: 'Заголовок',
   description: 'Описание',
   loading: 'Загрузка...',
+
   create: 'Создать',
   save: 'Сохранить',
+
   status: 'Статус',
   edit: 'Редактировать',
   delete: 'Удалить',
   back: 'Назад',
+
   messages: 'Сообщения',
 
   profile: {
@@ -53,5 +57,11 @@ export default {
     dashboard: 'Рабочий стол',
     profile: 'Профиль',
     logout: 'Выйти',
+  },
+
+  messages: {
+    empty: 'Сообщений пока нет',
+    unknownUser: 'Неизвестный пользователь',
+    downloadFile: 'Скачать файл',
   },
 };
