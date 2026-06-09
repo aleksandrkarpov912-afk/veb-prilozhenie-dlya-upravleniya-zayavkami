@@ -4,6 +4,9 @@ import { useTranslation } from 'react-i18next';
 
 import { getTicket, updateTicket } from '../api/tickets';
 
+const TITLE_MAX = 100;
+const DESCRIPTION_MAX = 3000;
+
 export default function EditTicketPage() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -62,18 +65,26 @@ export default function EditTicketPage() {
         <div>
           <input
             value={title}
+            maxLength={TITLE_MAX}
             onChange={(e) => setTitle(e.target.value)}
             placeholder={t('title')}
           />
+          <div style={{ fontSize: 12 }}>
+            {title.length}/{TITLE_MAX}
+          </div>
         </div>
 
         <div style={{ marginTop: 10 }}>
           <textarea
             value={description}
+            maxLength={DESCRIPTION_MAX}
             onChange={(e) => setDescription(e.target.value)}
             placeholder={t('description')}
-            rows={6}
+            rows={8}
           />
+          <div style={{ fontSize: 12 }}>
+            {description.length}/{DESCRIPTION_MAX}
+          </div>
         </div>
 
         <button

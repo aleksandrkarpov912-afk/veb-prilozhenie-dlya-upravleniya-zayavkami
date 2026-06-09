@@ -13,6 +13,15 @@ export default function DashboardPage() {
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const truncate = (
+    text: string,
+    max = 120,
+  ) => {
+    return text.length > max
+      ? text.slice(0, max) + '...'
+      : text;
+  };
+
   const logout = () => {
     localStorage.removeItem('token');
     navigate('/login');
@@ -39,12 +48,9 @@ export default function DashboardPage() {
         <h1>{t('dashboard')}</h1>
 
         <div style={{ display: 'flex', gap: 10 }}>
-        
-
           <Link to="/tickets/create">
             {t('createTicket')}
           </Link>
-
 
           <button onClick={logout}>
             {t('logout')}
@@ -62,7 +68,15 @@ export default function DashboardPage() {
                 <h3>{ticket.title}</h3>
               </Link>
 
-              <p>{ticket.description}</p>
+              <p
+                style={{
+                  whiteSpace: 'pre-wrap',
+                  overflowWrap: 'break-word',
+                  wordBreak: 'break-word',
+                }}
+              >
+                {truncate(ticket.description, 120)}
+              </p>
 
               <p>
                 {t('status')}: {getStatusLabel(t, ticket.status)}

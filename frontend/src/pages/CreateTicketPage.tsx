@@ -4,6 +4,9 @@ import { useTranslation } from 'react-i18next';
 
 import { createTicket } from '../api/tickets';
 
+const TITLE_MAX = 100;
+const DESCRIPTION_MAX = 3000;
+
 export default function CreateTicketPage() {
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -52,14 +55,23 @@ export default function CreateTicketPage() {
           type="text"
           placeholder={t('title')}
           value={title}
+          maxLength={TITLE_MAX}
           onChange={(e) => setTitle(e.target.value)}
         />
+        <div style={{ fontSize: 12 }}>
+          {title.length}/{TITLE_MAX}
+        </div>
 
         <textarea
           placeholder={t('description')}
           value={description}
+          maxLength={DESCRIPTION_MAX}
+          rows={8}
           onChange={(e) => setDescription(e.target.value)}
         />
+        <div style={{ fontSize: 12 }}>
+          {description.length}/{DESCRIPTION_MAX}
+        </div>
 
         {error && <p style={{ color: 'red' }}>{error}</p>}
 

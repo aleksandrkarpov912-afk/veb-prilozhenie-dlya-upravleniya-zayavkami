@@ -95,7 +95,14 @@ export default function TicketDetailsPage() {
         {t('ticket.back')}
       </button>
 
-      <h1>{ticket.title}</h1>
+      <h1
+        style={{
+          overflowWrap: 'break-word',
+          wordBreak: 'break-word',
+        }}
+      >
+        {ticket.title}
+      </h1>
 
       <div style={{ marginTop: 20, display: 'flex', gap: 10 }}>
         <Link to={`/tickets/${ticket.id}/edit`}>
@@ -109,7 +116,16 @@ export default function TicketDetailsPage() {
         )}
       </div>
 
-      <p style={{ marginTop: 20 }}>{ticket.description}</p>
+      <p
+        style={{
+          marginTop: 20,
+          whiteSpace: 'pre-wrap',
+          overflowWrap: 'break-word',
+          wordBreak: 'break-word',
+        }}
+      >
+        {ticket.description}
+      </p>
 
       <div style={{ marginTop: 10 }}>
         <strong>{t('ticket.status')}:</strong>{' '}
