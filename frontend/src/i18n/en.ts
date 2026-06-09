@@ -59,7 +59,7 @@ export default {
     REJECTED: 'Rejected',
   },
 
-  messages: {
+  messagesBlock: {
     empty: 'No messages yet',
     unknownUser: 'Unknown user',
     downloadFile: 'Download file',

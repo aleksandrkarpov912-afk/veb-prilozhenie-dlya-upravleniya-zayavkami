@@ -59,7 +59,7 @@ export default {
     logout: 'Выйти',
   },
 
-  messages: {
+  messagesBlock: {
     empty: 'Сообщений пока нет',
     unknownUser: 'Неизвестный пользователь',
     downloadFile: 'Скачать файл',
