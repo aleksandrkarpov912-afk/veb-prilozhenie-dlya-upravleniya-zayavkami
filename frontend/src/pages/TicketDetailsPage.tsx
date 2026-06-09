@@ -46,7 +46,7 @@ export default function TicketDetailsPage() {
 
     const handler = (msg: any) => {
       setMessages((prev) => [...prev, msg]);
-    });
+    };
 
     socket.on('newMessage', handler);
 
@@ -86,30 +86,18 @@ export default function TicketDetailsPage() {
     }
   };
 
-  if (loading) return <div>{t('loading')}</div>;
-  if (!ticket) return <div>Ticket not found</div>;
+  if (loading) return <div style={{ padding: 40 }}>{t('loading')}</div>;
+  if (!ticket) return <div style={{ padding: 40 }}>Ticket not found</div>;
 
   return (
-    <div style={{ padding: 40, maxWidth: 700, margin: '0 auto', textAlign: 'center' }}>
-      <button style={{ marginBottom: 20 }} onClick={() => navigate(-1)}>
+    <div style={{ padding: 40, maxWidth: 700 }}>
+      <button onClick={() => navigate(-1)}>
         {t('ticket.back')}
       </button>
 
-      <h1 style={{ marginBottom: 20 }}>{ticket.title}</h1>
+      <h1>{ticket.title}</h1>
 
-      <div style={{ display: 'flex', justifyContent: 'center', gap: 10, marginBottom: 20 }}>
-        <Link to={`/tickets/${ticket.id}/edit`}>
-          {t('edit')}
-        </Link>
-
-        {role === 'ADMIN' && (
-          <button onClick={handleDelete}>
-            {t('delete')}
-          </button>
-        )}
-      </div>
-
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 10 }}>
+      <div style={{ display: 'flex', gap: 10, marginBottom: 10 }}>
         <strong>{t('ticket.status')}:</strong>
 
         {role === 'ADMIN' ? (
@@ -143,21 +131,31 @@ export default function TicketDetailsPage() {
         )}
       </div>
 
-      <p style={{ marginTop: 20 }}>{ticket.description}</p>
+      <p>{ticket.description}</p>
 
-      <div style={{ marginTop: 20 }}>
-        <p>
-          <strong>{t('ticket.created')}:</strong>{' '}
-          {new Date(ticket.createdAt).toLocaleString()}
-        </p>
+      <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>
+        <Link to={`/tickets/${ticket.id}/edit`}>
+          {t('edit')}
+        </Link>
 
-        {ticket.user && (
-          <p>
-            <strong>{t('ticket.author')}:</strong>{' '}
-            {ticket.user.email}
-          </p>
+        {role === 'ADMIN' && (
+          <button onClick={handleDelete}>
+            {t('delete')}
+          </button>
         )}
       </div>
+
+      <p style={{ marginTop: 20 }}>
+        <strong>{t('ticket.created')}:</strong>{' '}
+        {new Date(ticket.createdAt).toLocaleString()}
+      </p>
+
+      {ticket.user && (
+        <p>
+          <strong>{t('ticket.author')}:</strong>{' '}
+          {ticket.user.email}
+        </p>
+      )}
 
       <div style={{ marginTop: 40 }}>
         <h3>{t('ticket.messages')}</h3>
