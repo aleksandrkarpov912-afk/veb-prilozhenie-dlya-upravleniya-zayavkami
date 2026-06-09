@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'; 
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -12,7 +12,7 @@ export default function DashboardPage() {
 
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [loading, setLoading] = useState(true);
-  
+
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
@@ -22,14 +22,17 @@ export default function DashboardPage() {
   };
 
   const fetchTickets = async (currentPage = 1) => {
-    setLoading(true); 
+    setLoading(true);
+
     try {
       const data = await getTickets(currentPage, 10);
-      setTickets(data.data);
-      setPage(data.page);
-      setTotalPages(data.totalPages);
+
+      setTickets(data?.data ?? []);
+      setPage(data?.page ?? 1);
+      setTotalPages(data?.totalPages ?? 1);
     } catch (error) {
       console.error(error);
+      setTickets([]);
     } finally {
       setLoading(false);
     }
@@ -48,6 +51,7 @@ export default function DashboardPage() {
           <Link to="/tickets/create">
             {t('createTicket')}
           </Link>
+
           <button onClick={logout}>
             {t('logout')}
           </button>
@@ -64,7 +68,9 @@ export default function DashboardPage() {
                 <Link to={`/tickets/${ticket.id}`}>
                   <h3>{ticket.title}</h3>
                 </Link>
+
                 <p>{ticket.description}</p>
+
                 <p>
                   {t('status')}: {getStatusLabel(t, ticket.status)}
                 </p>
@@ -76,7 +82,6 @@ export default function DashboardPage() {
             <button
               onClick={() => setPage((p) => Math.max(p - 1, 1))}
               disabled={page === 1}
-              style={{ cursor: page === 1 ? 'not-allowed' : 'pointer', opacity: page === 1 ? 0.5 : 1 }}
             >
               Previous
             </button>
@@ -90,7 +95,6 @@ export default function DashboardPage() {
                 setPage((p) => Math.min(p + 1, totalPages))
               }
               disabled={page === totalPages}
-              style={{ cursor: page === totalPages ? 'not-allowed' : 'pointer', opacity: page === totalPages ? 0.5 : 1 }}
             >
               Next
             </button>
