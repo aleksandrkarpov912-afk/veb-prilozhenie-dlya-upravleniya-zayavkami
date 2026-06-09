@@ -97,7 +97,7 @@ export default function TicketDetailsPage() {
 
       <h1>{ticket.title}</h1>
 
-      <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>
+      <div style={{ marginTop: 20, display: 'flex', gap: 10 }}>
         <Link to={`/tickets/${ticket.id}/edit`}>
           {t('edit')}
         </Link>
@@ -111,8 +111,8 @@ export default function TicketDetailsPage() {
 
       <p style={{ marginTop: 20 }}>{ticket.description}</p>
 
-      <div style={{ display: 'flex', gap: 10, marginTop: 10 }}>
-        <strong>{t('ticket.status')}:</strong>
+      <div style={{ marginTop: 10 }}>
+        <strong>{t('ticket.status')}:</strong>{' '}
 
         {role === 'ADMIN' ? (
           <select
@@ -145,17 +145,19 @@ export default function TicketDetailsPage() {
         )}
       </div>
 
-      <p style={{ marginTop: 20 }}>
-        <strong>{t('ticket.created')}:</strong>{' '}
-        {new Date(ticket.createdAt).toLocaleString()}
-      </p>
-
-      {ticket.user && (
+      <div style={{ marginTop: 20 }}>
         <p>
-          <strong>{t('ticket.author')}:</strong>{' '}
-          {ticket.user.email}
+          <strong>{t('ticket.created')}:</strong>{' '}
+          {new Date(ticket.createdAt).toLocaleString()}
         </p>
-      )}
+
+        {ticket.user && (
+          <p>
+            <strong>{t('ticket.author')}:</strong>{' '}
+            {ticket.user.email}
+          </p>
+        )}
+      </div>
 
       <div style={{ marginTop: 40 }}>
         <h3>{t('ticket.messages')}</h3>
