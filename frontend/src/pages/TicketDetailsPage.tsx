@@ -97,7 +97,21 @@ export default function TicketDetailsPage() {
 
       <h1>{ticket.title}</h1>
 
-      <div style={{ display: 'flex', gap: 10, marginBottom: 10 }}>
+      <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>
+        <Link to={`/tickets/${ticket.id}/edit`}>
+          {t('edit')}
+        </Link>
+
+        {role === 'ADMIN' && (
+          <button onClick={handleDelete}>
+            {t('delete')}
+          </button>
+        )}
+      </div>
+
+      <p style={{ marginTop: 20 }}>{ticket.description}</p>
+
+      <div style={{ display: 'flex', gap: 10, marginTop: 10 }}>
         <strong>{t('ticket.status')}:</strong>
 
         {role === 'ADMIN' ? (
@@ -131,36 +145,17 @@ export default function TicketDetailsPage() {
         )}
       </div>
 
-      <p>{ticket.description}</p>
+      <p style={{ marginTop: 20 }}>
+        <strong>{t('ticket.created')}:</strong>{' '}
+        {new Date(ticket.createdAt).toLocaleString()}
+      </p>
 
-      <div style={{ marginTop: 20 }}>
-        <Link to={`/tickets/${ticket.id}/edit`}>
-          {t('edit')}
-        </Link>
-
-        {role === 'ADMIN' && (
-          <>
-            {' '}
-            <button onClick={handleDelete}>
-              {t('delete')}
-            </button>
-          </>
-        )}
-      </div>
-
-      <div style={{ marginTop: 20 }}>
+      {ticket.user && (
         <p>
-          <strong>{t('ticket.created')}:</strong>{' '}
-          {new Date(ticket.createdAt).toLocaleString()}
+          <strong>{t('ticket.author')}:</strong>{' '}
+          {ticket.user.email}
         </p>
-
-        {ticket.user && (
-          <p>
-            <strong>{t('ticket.author')}:</strong>{' '}
-            {ticket.user.email}
-          </p>
-        )}
-      </div>
+      )}
 
       <div style={{ marginTop: 40 }}>
         <h3>{t('ticket.messages')}</h3>
