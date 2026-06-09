@@ -11,11 +11,7 @@ import { PrismaService } from '../prisma/prisma.service';
 export class TicketsService {
   constructor(private prisma: PrismaService) {}
 
-  async create(
-    userId: number,
-    title: string,
-    description: string,
-  ) {
+  async create(userId: number, title: string, description: string) {
     return this.prisma.ticket.create({
       data: {
         title,
@@ -25,19 +21,15 @@ export class TicketsService {
     });
   }
 
-  async myTickets(
-    userId: number,
-    page = 1,
-    limit = 10,
-  ) {
+  async myTickets(userId: number, page: number, limit: number) {
     const skip = (page - 1) * limit;
 
-    const [data, total] = await Promise.all([
+    const [items, total] = await this.prisma.$transaction([
       this.prisma.ticket.findMany({
         where: { userId },
+        orderBy: { createdAt: 'desc' },
         skip,
         take: limit,
-        orderBy: { createdAt: 'desc' },
       }),
       this.prisma.ticket.count({
         where: { userId },
@@ -45,34 +37,31 @@ export class TicketsService {
     ]);
 
     return {
-      data,
+      items,
       total,
       page,
-      totalPages: Math.ceil(total / limit),
+      limit,
     };
   }
 
-  async findAll(
-    page = 1,
-    limit = 10,
-  ) {
+  async findAll(page: number, limit: number) {
     const skip = (page - 1) * limit;
 
-    const [data, total] = await Promise.all([
+    const [items, total] = await this.prisma.$transaction([
       this.prisma.ticket.findMany({
+        include: { user: true },
+        orderBy: { createdAt: 'desc' },
         skip,
         take: limit,
-        include: { user: true },
-        orderBy: { id: 'desc' },
       }),
       this.prisma.ticket.count(),
     ]);
 
     return {
-      data,
+      items,
       total,
       page,
-      totalPages: Math.ceil(total / limit),
+      limit,
     };
   }
 
@@ -89,11 +78,7 @@ export class TicketsService {
     return ticket;
   }
 
-  async update(
-    id: number,
-    data: any,
-    user: any,
-  ) {
+  async update(id: number, data: any, user: any) {
     const ticket = await this.prisma.ticket.findUnique({
       where: { id },
     });
@@ -102,10 +87,7 @@ export class TicketsService {
       throw new NotFoundException('Ticket not found');
     }
 
-    if (
-      ticket.userId !== user.id &&
-      user.role !== 'ADMIN'
-    ) {
+    if (ticket.userId !== user.id && user.role !== 'ADMIN') {
       throw new ForbiddenException('Access denied');
     }
 
@@ -115,10 +97,7 @@ export class TicketsService {
     });
   }
 
-  async updateStatus(
-    id: number,
-    status: TicketStatus,
-  ) {
+  async updateStatus(id: number, status: TicketStatus) {
     const ticket = await this.prisma.ticket.findUnique({
       where: { id },
     });
@@ -129,14 +108,13 @@ export class TicketsService {
 
     return this.prisma.ticket.update({
       where: { id },
-      data: { status },
+      data: {
+        status,
+      },
     });
   }
 
-  async remove(
-    id: number,
-    user: any,
-  ) {
+  async remove(id: number, user: any) {
     const ticket = await this.prisma.ticket.findUnique({
       where: { id },
     });
@@ -145,10 +123,7 @@ export class TicketsService {
       throw new NotFoundException('Ticket not found');
     }
 
-    if (
-      ticket.userId !== user.id &&
-      user.role !== 'ADMIN'
-    ) {
+    if (ticket.userId !== user.id && user.role !== 'ADMIN') {
       throw new ForbiddenException('Access denied');
     }
 
