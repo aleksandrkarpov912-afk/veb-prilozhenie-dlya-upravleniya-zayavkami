@@ -8,7 +8,6 @@ import {
   Delete,
   Req,
   UseGuards,
-  Query,
 } from '@nestjs/common';
 
 import { AuthGuard } from '@nestjs/passport';
@@ -28,27 +27,24 @@ export class TicketsController {
   @UseGuards(AuthGuard('jwt'))
   @Post()
   create(@Req() req, @Body() dto: CreateTicketDto) {
-    return this.ticketsService.create(req.user.id, dto.title, dto.description);
+    return this.ticketsService.create(
+      req.user.id,
+      dto.title,
+      dto.description,
+    );
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Get('my')
-  myTickets(
-    @Req() req,
-    @Query('page') page = '1',
-    @Query('limit') limit = '10',
-  ) {
-    return this.ticketsService.myTickets(req.user.id, Number(page), Number(limit));
+  myTickets(@Req() req) {
+    return this.ticketsService.myTickets(req.user.id);
   }
 
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('ADMIN')
   @Get()
-  findAll(
-    @Query('page') page = '1',
-    @Query('limit') limit = '10',
-  ) {
-    return this.ticketsService.findAll(Number(page), Number(limit));
+  findAll() {
+    return this.ticketsService.findAll();
   }
 
   @UseGuards(AuthGuard('jwt'))
@@ -59,20 +55,37 @@ export class TicketsController {
 
   @UseGuards(AuthGuard('jwt'))
   @Patch(':id')
-  update(@Req() req, @Param('id') id: string, @Body() dto: UpdateTicketDto) {
-    return this.ticketsService.update(Number(id), dto, req.user);
+  update(
+    @Req() req,
+    @Param('id') id: string,
+    @Body() dto: UpdateTicketDto,
+  ) {
+    return this.ticketsService.update(
+      Number(id),
+      dto,
+      req.user,
+    );
   }
 
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('ADMIN')
   @Patch(':id/status')
-  updateStatus(@Param('id') id: string, @Body() dto: UpdateTicketStatusDto) {
-    return this.ticketsService.updateStatus(Number(id), dto.status);
+  updateStatus(
+    @Param('id') id: string,
+    @Body() dto: UpdateTicketStatusDto,
+  ) {
+    return this.ticketsService.updateStatus(
+      Number(id),
+      dto.status,
+    );
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
   remove(@Req() req, @Param('id') id: string) {
-    return this.ticketsService.remove(Number(id), req.user);
+    return this.ticketsService.remove(
+      Number(id),
+      req.user,
+    );
   }
 }
