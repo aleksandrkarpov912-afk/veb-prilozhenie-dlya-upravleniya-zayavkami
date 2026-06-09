@@ -145,6 +145,18 @@ export default function TicketDetailsPage() {
         )}
       </div>
 
+      <p>
+        <strong>{t('ticket.created')}:</strong>{' '}
+        {new Date(ticket.createdAt).toLocaleString()}
+      </p>
+
+      {ticket.user && (
+        <p>
+          <strong>{t('ticket.author')}:</strong>{' '}
+          {ticket.user.email}
+        </p>
+      )}
+
       <div style={{ marginTop: 40 }}>
         <h3>{t('ticket.messages')}</h3>
         <MessageList messages={messages} />
