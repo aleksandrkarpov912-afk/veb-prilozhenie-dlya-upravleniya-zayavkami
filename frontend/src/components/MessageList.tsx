@@ -37,19 +37,11 @@ export default function MessageList({ messages }: any) {
             </span>
           </div>
 
-          {m.text && (
-            <div>
-              {m.text}
-            </div>
-          )}
+          {m.text && <div>{m.text}</div>}
 
           {m.fileUrl && (
             <div style={{ marginTop: 8 }}>
-              <a
-                href={m.fileUrl}
-                target="_blank"
-                rel="noreferrer"
-              >
+              <a href={m.fileUrl} target="_blank" rel="noreferrer">
                 📎 {t('messages.downloadFile')}
               </a>
             </div>

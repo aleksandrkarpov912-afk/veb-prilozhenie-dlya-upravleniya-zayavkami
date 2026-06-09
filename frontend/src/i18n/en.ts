@@ -24,7 +24,15 @@ export default {
   delete: 'Delete',
   back: 'Back',
 
-  messages: 'Messages',
+  messagesTitle: 'Messages',
+
+  messages: {
+    empty: 'No messages yet',
+    unknownUser: 'Unknown user',
+    downloadFile: 'Download file',
+    writeMessage: 'Write message...',
+    send: 'Send',
+  },
 
   profile: {
     title: 'Profile',
@@ -58,13 +66,4 @@ export default {
     CLOSED: 'Closed',
     REJECTED: 'Rejected',
   },
-
-  messagesBlock: {
-  empty: 'No messages yet',
-  unknownUser: 'Unknown user',
-  downloadFile: 'Download file',
-
-  writeMessage: 'Write message...',
-  send: 'Send',
-},
 };

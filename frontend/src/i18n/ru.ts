@@ -24,7 +24,15 @@ export default {
   delete: 'Удалить',
   back: 'Назад',
 
-  messages: 'Сообщения',
+  messagesTitle: 'Сообщения',
+
+  messages: {
+    empty: 'Сообщений пока нет',
+    unknownUser: 'Неизвестный пользователь',
+    downloadFile: 'Скачать файл',
+    writeMessage: 'Написать сообщение...',
+    send: 'Отправить',
+  },
 
   profile: {
     title: 'Профиль',
@@ -46,25 +54,16 @@ export default {
     author: 'Автор',
   },
 
-  statusValues: {
-    OPEN: 'Открыта',
-    IN_PROGRESS: 'В процессе',
-    CLOSED: 'Закрыта',
-    REJECTED: 'Отклонена',
-  },
-
   nav: {
     dashboard: 'Рабочий стол',
     profile: 'Профиль',
     logout: 'Выйти',
   },
 
-  messagesBlock: {
-  empty: 'Сообщений пока нет',
-  unknownUser: 'Неизвестный пользователь',
-  downloadFile: 'Скачать файл',
-
-  writeMessage: 'Написать сообщение...',
-  send: 'Отправить',
-},
+  statusValues: {
+    OPEN: 'Открыта',
+    IN_PROGRESS: 'В процессе',
+    CLOSED: 'Закрыта',
+    REJECTED: 'Отклонена',
+  },
 };
