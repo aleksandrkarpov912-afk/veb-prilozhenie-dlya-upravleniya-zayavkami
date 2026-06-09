@@ -7,6 +7,7 @@ import {
   Post,
   Delete,
   Req,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 
@@ -87,5 +88,14 @@ export class TicketsController {
       Number(id),
       req.user,
     );
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get()
+  getAll(
+    @Query('page') page: number,
+    @Query('limit') limit: number,
+  ) {
+    return this.ticketsService.findAll(page, limit);
   }
 }

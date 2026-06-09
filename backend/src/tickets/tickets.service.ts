@@ -32,7 +32,25 @@ export class TicketsService {
     });
   }
 
-  async findAll() {
+  async findAll(page = 1, limit = 10) {
+    const skip = (page - 1) * limit;
+
+    const [data, total] = await this.prisma.ticket.findAndCount({
+      skip,
+      take: limit,
+      include: { user: true },
+      orderBy: { id: 'DESC' },
+    });
+
+    return {
+      data,
+      total,
+      page,
+      totalPages: Math.ceil(total / limit),
+    };
+  }
+
+  async findAllLegacy() {
     return this.prisma.ticket.findMany({
       include: { user: true },
       orderBy: { createdAt: 'desc' },
